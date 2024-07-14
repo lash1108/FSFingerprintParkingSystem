@@ -1,0 +1,59 @@
+.container-main{
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+
+  .welcome-dash, .payment-dash{
+    height: 75vh;
+    display: flex;
+    flex-direction: column;
+    color: #ffffff;
+
+    mat-card-content {
+      flex: 1 0 auto;
+    }
+  }
+
+  .welcome-dash{
+    width: 65%;
+    background-color: rgba(34, 50, 89, 0.8);
+    mat-card-header{
+      mat-card-title{
+        h2{
+          align-items: center;
+          font-size: 2rem;
+          mat-icon{
+            font-size: 2rem;
+            margin-right: 2rem;
+          }
+        }
+      }
+    }
+    mat-card-actions {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem;
+    }
+  }
+
+  .payment-dash{
+    max-width:20%;
+    background-color: rgba(52, 53, 62, 0.9);
+    align-items: center;
+
+    button {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: auto;
+      overflow: visible;
+      padding: 0.5rem;
+      text-align: center;
+      white-space: normal;
+      word-break: break-word;
+      margin-bottom: 0.5rem;
+    }
+
+  }
+
+}

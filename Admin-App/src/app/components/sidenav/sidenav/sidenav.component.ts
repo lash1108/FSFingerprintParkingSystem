@@ -2,6 +2,7 @@ import {animate, keyframes, style, transition, trigger,} from '@angular/animatio
 import {Component, EventEmitter, HostListener, OnInit, Output,} from '@angular/core';
 
 import {navBarData} from "./nav-data";
+import {GlobalService} from "../../../services/global.service";
 
 interface SideNavToggle {
   screenWidth: number;
@@ -43,7 +44,7 @@ export class SidenavComponent implements OnInit {
   screenWidth = 0;
   navData = navBarData;
 
-  constructor() {
+  constructor(private globalService:GlobalService) {
   }
 
   @HostListener('window:resize', ['$event']) onResize(event: any) {
@@ -76,5 +77,14 @@ export class SidenavComponent implements OnInit {
       screenWidth: this.screenWidth,
     });
   }
+
+  getFilteredNavData() {
+    if (this.globalService.getTypeUser() === 1) {
+      return this.navData.filter(value => value.section === 'main')
+    } else{
+      return this.navData.filter(value => value.section === 'main' && value.type === 'usr')
+    }
+  }
+
 
 }

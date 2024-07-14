@@ -1,1 +1,44 @@
-<p>dashboard-home works!</p>
+<div class="container-main">
+  <mat-card class="welcome-dash">
+    <mat-card-header>
+      <mat-card-title>
+        <h2><mat-icon #icon>person_pin</mat-icon>Bienvenido de vuelta</h2>
+      </mat-card-title>
+      <mat-card-subtitle>usuario</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <h3>Autos activos</h3>
+      <button mat-flat-button color="primary">Pagar</button>
+      <p>...</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <mat-divider class="footer-divider"></mat-divider>
+      <button mat-button color="warn" [appGoTo]="'/dashboard/active-park'">Ver mas</button>
+      <button mat-button color="accent">Añadir nuevo</button>
+    </mat-card-actions>
+    <mat-card-footer>
+      <small>a</small>
+    </mat-card-footer>
+  </mat-card>
+  <mat-card class="payment-dash">
+    <mat-card-header>
+      <div>
+        <p>Aqui debe ir el compoenente del Reloj</p>
+      </div>
+    </mat-card-header>
+    <mat-card-content>
+    <button mat-flat-button color="primary" [appGoTo]="'/dashboard/active-park'">Gestionar autos pensionados</button>
+    <button mat-flat-button color="primary" [appGoTo]="'/dashboard/payment-history'">Ver el historial de pagos</button>
+    <button mat-flat-button color="primary" [appGoTo]="'/dashboard/payment-history'"
+    *ngIf="typeUsr==1">Gestionar usuarios</button>
+    <button mat-flat-button color="primary" [appGoTo]="'/dashboard/payment-history'"
+    *ngIf="typeUsr==1">Ver historial de transacciones</button>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button color="accent">Solicitar asistencia</button>
+    </mat-card-actions>
+    <mat-card-footer>
+      <small></small>
+    </mat-card-footer>
+  </mat-card>
+</div>

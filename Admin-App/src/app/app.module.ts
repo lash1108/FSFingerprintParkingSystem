@@ -19,6 +19,11 @@ import {SidenavUtilComponent} from './components/sidenav/sidenav-util/sidenav-ut
 import {SidenavBodyComponent} from './components/sidenav/sidenav-body/sidenav-body.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { DashboardHomeComponent } from './components/dashboard-home/dashboard-home.component';
+import { ActiveParkComponent } from './components/active-park/active-park.component';
+import { PaymentHistoryComponent } from './components/payment-history/payment-history.component';
+import { ActiveUsersComponent } from './components/active-users/active-users.component';
+import { GenericHistoryComponent } from './components/generic-history/generic-history.component';
+import { GoToDirective } from './directives/go-to.directive';
 
 @NgModule({
   declarations: [
@@ -30,6 +35,11 @@ import { DashboardHomeComponent } from './components/dashboard-home/dashboard-ho
     SidenavBodyComponent,
     SettingsComponent,
     DashboardHomeComponent,
+    ActiveParkComponent,
+    PaymentHistoryComponent,
+    ActiveUsersComponent,
+    GenericHistoryComponent,
+    GoToDirective,
   ],
   imports: [
     BrowserModule,

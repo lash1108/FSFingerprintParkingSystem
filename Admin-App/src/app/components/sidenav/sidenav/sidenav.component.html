@@ -9,7 +9,7 @@
     </button>-->
   </div>
   <ul class="sidenav-nav">
-    <li *ngFor="let data of navData" class="sidenav-nav-item">
+    <li *ngFor="let data of getFilteredNavData()" class="sidenav-nav-item">
       <a [routerLinkActiveOptions]="{exact:true}" [routerLink]="[data.routerLink]" class="sidenav-nav-link"
          routerLinkActive="active" *ngIf="data.section === 'main'">
         <mat-icon>{{ data.icon }}</mat-icon>

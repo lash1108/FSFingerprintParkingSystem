@@ -4,6 +4,10 @@ import { HomeComponent } from "./components/home/home.component";
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { SettingsComponent } from "./components/settings/settings.component";
 import {DashboardHomeComponent} from "./components/dashboard-home/dashboard-home.component";
+import {ActiveParkComponent} from "./components/active-park/active-park.component";
+import {PaymentHistoryComponent} from "./components/payment-history/payment-history.component";
+import {ActiveUsersComponent} from "./components/active-users/active-users.component";
+import {GenericHistoryComponent} from "./components/generic-history/generic-history.component";
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -13,6 +17,10 @@ const routes: Routes = [
     children: [
       { path: 'settings', component: SettingsComponent },
       { path: 'dashboard-home', component: DashboardHomeComponent },
+      { path: 'active-park', component: ActiveParkComponent },
+      { path: 'payment-history', component: PaymentHistoryComponent },
+      { path: 'active-users', component: ActiveUsersComponent },
+      { path: 'history', component: GenericHistoryComponent },
       { path: '',redirectTo:'dashboard-home', pathMatch:'full'}
     ]
   },
