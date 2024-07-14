@@ -34,7 +34,7 @@ Reporting & Analytics: Provides detailed reports and analytics on parking usage.
 
 - Access the application:
   - Backend: [http://localhost:8080](http://localhost:8080)
-  - Frontend: [http://localhost:8080](http://localhost:4200)
+  - Frontend: [http://localhost:4200](http://localhost:4200)
 
 - Contributing:
 
