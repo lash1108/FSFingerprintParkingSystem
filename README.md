@@ -22,18 +22,19 @@ Reporting & Analytics: Provides detailed reports and analytics on parking usage.
 
 - Clone the repository:
 
-´git clone https://github.com/AlexTcw/FSFingerprintParkingSystem.git´
-Navigate to the project directory:
+`git clone https://github.com/AlexTcw/FSFingerprintParkingSystem.git`
 
-´cd FSFingerprintParkingSystem´
+- Navigate to the project directory:
+
+`cd FSFingerprintParkingSystem`
   
 - Run Docker Compose to start the application:
   
-´docker compose up´
+`docker compose up`
 
 - Access the application:
-  - Backend: http://localhost:8080
-  - Frontend: http://localhost:4200
+  - Backend: [http://localhost:8080](http://localhost:8080)
+  - Frontend: [http://localhost:8080](http://localhost:8080)
 
 - Contributing:
 
