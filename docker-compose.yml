@@ -1,0 +1,36 @@
+networks:
+  parkingnetwork:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.18.0.0/16
+
+services:
+  estacionamiento-db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: '09112'
+      MYSQL_DATABASE: 'estDBFingerPrint'
+      MYSQL_USER: 'alextcw'
+      MYSQL_PASSWORD: '09112'
+    networks:
+      parkingnetwork:
+        ipv4_address: 192.18.0.10
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+
+  admin-backend:
+    image: admin-parking
+    restart: always
+    networks:
+      parkingnetwork:
+        ipv4_address: 192.18.0.20
+    ports:
+      - '8080:8080'
+    expose:
+      - '8080'
+    depends_on:
+      - estacionamiento-db

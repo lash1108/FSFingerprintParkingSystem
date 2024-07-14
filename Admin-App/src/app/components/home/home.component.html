@@ -1,0 +1,106 @@
+<div class="body-container">
+  <div class="scan">
+    <div class="fingerprint"></div>
+    <h3>Scanning...</h3>
+  </div>
+  <div class="card-container" [@flipState]="rotatedState ? 'active' : 'inactive'">
+    <div class="card-inner">
+      <mat-card class="msg-container tp-box__side tp-box__front"
+                *ngIf="rotatedState==0"
+                style="display: flex; flex-direction: column; height: 100%; ">
+        <mat-card-header style="display: flex; flex-direction: column">
+          <mat-card-title>
+            <mat-icon class="car-icon" style="font-size: 8rem; margin-left: 40%"> directions_car</mat-icon>
+            <h2 class="tittle-text" style="color: #5AE6FF; font-size: 2.5rem;">Bienvenido al Estacionamiento</h2>
+          </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p class="msh-text" style="font-size: 1.8rem; margin-left: 1.6rem;">¡Estamos encantados de tenerte aquí!</p>
+          <mat-card-subtitle>
+            <p style="font-size: 1rem; margin-left: 1.6rem;">Para comenzar, utilice el lector de huellas</p>
+          </mat-card-subtitle>
+        </mat-card-content>
+
+        <mat-card-actions style="margin-top: auto; display: flex; flex-direction: column; margin-left: 1.6rem; margin-bottom: 10%; margin-right: 2rem">
+          <div class="login-info" style="display: flex; flex-direction: column; gap: 8px;">
+            <mat-card-subtitle>¿Ya eres un usuario pensionado o deseas convertirte en uno?</mat-card-subtitle>
+            <div class="buttons" style="display: flex; gap: 10%;">
+              <button mat-raised-button color="primary"
+                      (click)="rotateState(1)">Log In</button>
+              <button mat-raised-button color="accent"
+                      (click)="rotateState(2)">Sign Up</button>
+            </div>
+          </div>
+        </mat-card-actions>
+      </mat-card>
+      <mat-card class="msg-container tp-box__side tp-box__back"
+                *ngIf="rotatedState==1"
+                style="display: flex; flex-direction: column; height: 100%; ">
+        <mat-card-header style="display: flex; flex-direction: column">
+          <mat-card-title>
+            <mat-icon class="car-icon" style="font-size: 8rem; margin-left: 40%"> directions_car</mat-icon>
+            <h2 class="tittle-text" style="color: #5AE6FF; font-size: 2.5rem;">Bienvenido al Estacionamiento</h2>
+          </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p class="msh-text" style="font-size: 1.8rem; margin-left: 1.6rem;">Ingresar como pensionado</p>
+          <mat-card-subtitle>
+            <p style="font-size: 1rem; margin-left: 1.6rem;">Por favor proporcione sus credenciales</p>
+          </mat-card-subtitle>
+        </mat-card-content>
+
+        <mat-card-actions style="margin-top: auto; display: flex; flex-direction: column; margin-left: 1.6rem; margin-bottom: 10%; margin-right: 2rem">
+          <div class="login-info" style="display: flex; flex-direction: column; gap: 8px;">
+            <mat-form-field appearance="fill">
+              <mat-label>Introduce tu email o tu nombre de usuario</mat-label>
+              <input
+                matInput
+                placeholder="pat@example.com"
+                required>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Ingresa tu contraseña</mat-label>
+              <input matInput [type]="hide ? 'password' : 'text'" placeholder="*********" required>
+              <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="hide ? 'Show password' : 'Hide password'" [attr.aria-pressed]="hide">
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+            </mat-form-field>
+            <button mat-raised-button color="warn"
+                    (click)="rotateState(0)"><-- Back</button>
+          </div>
+        </mat-card-actions>
+
+      </mat-card>
+      <mat-card class="msg-container tp-box__side tp-box__back"
+                *ngIf="rotatedState==2"
+                style="display: flex; flex-direction: column; height: 100%; ">
+        <mat-card-header style="display: flex; flex-direction: column">
+          <mat-card-title>
+            <mat-icon class="car-icon" style="font-size: 8rem; margin-left: 40%"> directions_car</mat-icon>
+            <h2 class="tittle-text" style="color: #5AE6FF; font-size: 2.5rem;">Bienvenido al Estacionamiento</h2>
+          </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p class="msh-text" style="font-size: 1.8rem; margin-left: 1.6rem;">Crear un nuevo usuario pensionado</p>
+          <mat-card-subtitle>
+            <p style="font-size: 1rem; margin-left: 1.6rem;">Para comenzar por favor use el lector de huellas</p>
+          </mat-card-subtitle>
+        </mat-card-content>
+
+        <mat-card-actions style="margin-top: auto; display: flex; flex-direction: column; margin-left: 1.6rem; margin-bottom: 10%; margin-right: 2rem">
+          <div class="login-info" style="display: flex; flex-direction: column; gap: 8px;">
+            <mat-card-subtitle>Por favor use el lector de huellas para crear su usuario</mat-card-subtitle>
+            <div class="buttons" style="display: flex; gap: 10%;">
+              <button mat-raised-button color="warn"
+                      (click)="rotateState(0)"><-- Back</button>
+            </div>
+          </div>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+
+</div>

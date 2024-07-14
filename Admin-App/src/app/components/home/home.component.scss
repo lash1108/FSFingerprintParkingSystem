@@ -1,0 +1,194 @@
+@keyframes animate {
+  0%, 100% {
+    height: 0;
+  }
+  50% {
+    height: 100%;
+  }
+}
+
+@keyframes animate_line {
+  0%, 100% {
+    top: 0;
+  }
+  50% {
+    top: 100%;
+  }
+}
+
+@keyframes animate_text {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+*{
+  color: #fff;
+}
+
+.body-container {
+  background-image: url("/assets/img/b2.png");
+  background-size: cover;
+  margin: 0;height: 100%;
+  font-family: 'Arial', sans-serif;
+  font-stretch: extra-condensed;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 5rem 2rem 0;
+
+  .card-container {
+    perspective: 1000px;
+    position: relative;
+    width: 49%;
+    height: 100%;
+    transform-style: preserve-3d;
+  }
+
+  .tp-box__front {
+    transform: rotateY(0deg);
+  }
+
+  .tp-box__back {
+    transform: rotateY(180deg);
+  }
+
+  .card-inner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+  }
+
+  .msg-container {
+    padding: 1rem;
+    background-color: rgba(62, 63, 68, 0.9);
+    text-align: match-parent;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    //backface-visibility: hidden;
+
+    button{
+      width: 100%;
+    }
+    mat-icon{
+      color: #E88D67;
+    }
+  }
+
+  .scan {
+    margin-top: 8%;
+    margin-left: 10%;
+    width: 320px;
+    height: 380px;
+    .fingerprint {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: url('/assets/img/fingerprint.png');
+      background-size: cover;
+    }
+
+    .fingerprint::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('/assets/img/fingerprint-back.png');
+      background-size: cover;
+      animation: animate 4s ease-in-out infinite;
+    }
+
+    .fingerprint::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: #3fefef;
+      border-radius: 8px;
+      filter: drop-shadow(0 0 20px #3fefef) drop-shadow(0 0 60px #3fefef);
+      animation: animate_line 4s ease-in-out infinite;
+    }
+
+    h3 {
+      text-transform: uppercase;
+      font-size: 4em;
+      letter-spacing: 2px;
+      margin-top: 20px;
+      color: #3fefef;
+      filter: drop-shadow(0 0 20px #3fefef) drop-shadow(0 0 60px #3fefef);
+      animation: animate_text 0.5s steps(1) infinite;
+    }
+  }
+}
+
+@media (max-width: 1000px) {
+
+  .body-container {
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 0 80px 80px 80px;
+    height: 140vh;
+
+    .card-container {
+      margin-bottom: 5rem;
+      width: 100%;
+      max-height: 60%;
+      margin-left: 0;
+      .msg-container {
+        .tittle-text{
+          font-size: 1em !important;
+        }
+        .msh-text{
+          font-size: 1.3em !important;
+        }
+        margin-top: 20%;
+        .car-icon{
+          font-size: 4em !important;
+          margin-left: 45% !important;
+        }
+      }
+    }
+
+    .scan{
+      width: 140px;
+      height: 180px;
+
+      h3{
+        font-size: 2em;
+      }
+    }
+  }
+
+  @media (max-width: 500px) {
+    .body-container {
+      padding: 0 0 30px 0;
+      .card-container {
+        width: 100%;
+        .msg-container {
+          .car-icon{
+            margin-left: 35% !important;
+          }
+        }
+      }
+
+      .scan{
+        margin-left: 10%;
+      }
+    }
+  }
+
+
+}
