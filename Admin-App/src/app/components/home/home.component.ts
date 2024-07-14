@@ -21,15 +21,16 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
 
 })
 export class HomeComponent implements OnInit {
-  rotatedState:number = 0;
+  rotatedState: number = 0;
   hide = true;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
 
-  rotateState = (state:number) => {
+  rotateState = (state: number) => {
     /*0 home | 1 login | 2 signing*/
     this.rotatedState = state
   };

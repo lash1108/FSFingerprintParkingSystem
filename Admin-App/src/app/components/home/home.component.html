@@ -3,10 +3,10 @@
     <div class="fingerprint"></div>
     <h3>Scanning...</h3>
   </div>
-  <div class="card-container" [@flipState]="rotatedState ? 'active' : 'inactive'">
+  <div [@flipState]="rotatedState ? 'active' : 'inactive'" class="card-container">
     <div class="card-inner">
-      <mat-card class="msg-container tp-box__side tp-box__front"
-                *ngIf="rotatedState==0"
+      <mat-card *ngIf="rotatedState==0"
+                class="msg-container tp-box__side tp-box__front"
                 style="display: flex; flex-direction: column; height: 100%; ">
         <mat-card-header style="display: flex; flex-direction: column">
           <mat-card-title>
@@ -22,20 +22,23 @@
           </mat-card-subtitle>
         </mat-card-content>
 
-        <mat-card-actions style="margin-top: auto; display: flex; flex-direction: column; margin-left: 1.6rem; margin-bottom: 10%; margin-right: 2rem">
+        <mat-card-actions
+          style="margin-top: auto; display: flex; flex-direction: column; margin-left: 1.6rem; margin-bottom: 10%; margin-right: 2rem">
           <div class="login-info" style="display: flex; flex-direction: column; gap: 8px;">
             <mat-card-subtitle>¿Ya eres un usuario pensionado o deseas convertirte en uno?</mat-card-subtitle>
             <div class="buttons" style="display: flex; gap: 10%;">
-              <button mat-raised-button color="primary"
-                      (click)="rotateState(1)">Log In</button>
-              <button mat-raised-button color="accent"
-                      (click)="rotateState(2)">Sign Up</button>
+              <button (click)="rotateState(1)" color="primary"
+                      mat-raised-button>Log In
+              </button>
+              <button (click)="rotateState(2)" color="accent"
+                      mat-raised-button>Sign Up
+              </button>
             </div>
           </div>
         </mat-card-actions>
       </mat-card>
-      <mat-card class="msg-container tp-box__side tp-box__back"
-                *ngIf="rotatedState==1"
+      <mat-card *ngIf="rotatedState==1"
+                class="msg-container tp-box__side tp-box__back"
                 style="display: flex; flex-direction: column; height: 100%; ">
         <mat-card-header style="display: flex; flex-direction: column">
           <mat-card-title>
@@ -51,7 +54,8 @@
           </mat-card-subtitle>
         </mat-card-content>
 
-        <mat-card-actions style="margin-top: auto; display: flex; flex-direction: column; margin-left: 1.6rem; margin-bottom: 10%; margin-right: 2rem">
+        <mat-card-actions
+          style="margin-top: auto; display: flex; flex-direction: column; margin-left: 1.6rem; margin-bottom: 10%; margin-right: 2rem">
           <div class="login-info" style="display: flex; flex-direction: column; gap: 8px;">
             <mat-form-field appearance="fill">
               <mat-label>Introduce tu email o tu nombre de usuario</mat-label>
@@ -62,19 +66,21 @@
             </mat-form-field>
             <mat-form-field appearance="fill">
               <mat-label>Ingresa tu contraseña</mat-label>
-              <input matInput [type]="hide ? 'password' : 'text'" placeholder="*********" required>
-              <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="hide ? 'Show password' : 'Hide password'" [attr.aria-pressed]="hide">
-                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              <input [type]="hide ? 'password' : 'text'" matInput placeholder="*********" required>
+              <button (click)="hide = !hide" [attr.aria-label]="hide ? 'Show password' : 'Hide password'" [attr.aria-pressed]="hide"
+                      mat-icon-button matSuffix>
+                <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
               </button>
             </mat-form-field>
-            <button mat-raised-button color="warn"
-                    (click)="rotateState(0)"><-- Back</button>
+            <button (click)="rotateState(0)" color="warn"
+                    mat-raised-button><-- Back
+            </button>
           </div>
         </mat-card-actions>
 
       </mat-card>
-      <mat-card class="msg-container tp-box__side tp-box__back"
-                *ngIf="rotatedState==2"
+      <mat-card *ngIf="rotatedState==2"
+                class="msg-container tp-box__side tp-box__back"
                 style="display: flex; flex-direction: column; height: 100%; ">
         <mat-card-header style="display: flex; flex-direction: column">
           <mat-card-title>
@@ -90,12 +96,14 @@
           </mat-card-subtitle>
         </mat-card-content>
 
-        <mat-card-actions style="margin-top: auto; display: flex; flex-direction: column; margin-left: 1.6rem; margin-bottom: 10%; margin-right: 2rem">
+        <mat-card-actions
+          style="margin-top: auto; display: flex; flex-direction: column; margin-left: 1.6rem; margin-bottom: 10%; margin-right: 2rem">
           <div class="login-info" style="display: flex; flex-direction: column; gap: 8px;">
             <mat-card-subtitle>Por favor use el lector de huellas para crear su usuario</mat-card-subtitle>
             <div class="buttons" style="display: flex; gap: 10%;">
-              <button mat-raised-button color="warn"
-                      (click)="rotateState(0)"><-- Back</button>
+              <button (click)="rotateState(0)" color="warn"
+                      mat-raised-button><-- Back
+              </button>
             </div>
           </div>
         </mat-card-actions>

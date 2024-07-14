@@ -25,14 +25,15 @@
   }
 }
 
-*{
+* {
   color: #fff;
 }
 
 .body-container {
   background-image: url("/assets/img/b2.png");
   background-size: cover;
-  margin: 0;height: 100%;
+  margin: 0;
+  height: 100%;
   font-family: 'Arial', sans-serif;
   font-stretch: extra-condensed;
   color: #fff;
@@ -73,10 +74,11 @@
     height: 100%;
     //backface-visibility: hidden;
 
-    button{
+    button {
       width: 100%;
     }
-    mat-icon{
+
+    mat-icon {
       color: #E88D67;
     }
   }
@@ -86,6 +88,7 @@
     margin-left: 10%;
     width: 320px;
     height: 380px;
+
     .fingerprint {
       position: relative;
       width: 100%;
@@ -147,26 +150,30 @@
       width: 100%;
       max-height: 60%;
       margin-left: 0;
+
       .msg-container {
-        .tittle-text{
+        .tittle-text {
           font-size: 1em !important;
         }
-        .msh-text{
+
+        .msh-text {
           font-size: 1.3em !important;
         }
+
         margin-top: 20%;
-        .car-icon{
+
+        .car-icon {
           font-size: 4em !important;
           margin-left: 45% !important;
         }
       }
     }
 
-    .scan{
+    .scan {
       width: 140px;
       height: 180px;
 
-      h3{
+      h3 {
         font-size: 2em;
       }
     }
@@ -175,16 +182,18 @@
   @media (max-width: 500px) {
     .body-container {
       padding: 0 0 30px 0;
+
       .card-container {
         width: 100%;
+
         .msg-container {
-          .car-icon{
+          .car-icon {
             margin-left: 35% !important;
           }
         }
       }
 
-      .scan{
+      .scan {
         margin-left: 10%;
       }
     }

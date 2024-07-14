@@ -1,0 +1,29 @@
+<div [ngClass]="collapsed ? 'sidenav-collapsed' : ''" class="sidenav">
+  <div class="logo-container">
+    <button (click)="toggleCollapse()" class="logo">
+      <mat-icon style="font-weight: 500">view_headline</mat-icon>
+    </button>
+    <div *ngIf="collapsed" @fadeInOut class="logo-text">Admin</div>
+    <!--<button (click)="closeSidenav()" *ngIf="collapsed" @rotate class="btn-close">
+      <mat-icon>close</mat-icon>
+    </button>-->
+  </div>
+  <ul class="sidenav-nav">
+    <li *ngFor="let data of navData" class="sidenav-nav-item">
+      <a [routerLinkActiveOptions]="{exact:true}" [routerLink]="[data.routerLink]" class="sidenav-nav-link"
+         routerLinkActive="active" *ngIf="data.section === 'main'">
+        <mat-icon>{{ data.icon }}</mat-icon>
+        <span *ngIf="collapsed" @fadeInOut class="sidenav-link-text">{{ data.label }}</span>
+      </a>
+    </li>
+    <mat-divider style="margin-top: auto;"></mat-divider>
+    <li *ngFor="let data of navData" class="sidenav-nav-item" id="settings" >
+      <a [routerLinkActiveOptions]="{exact:true}" [routerLink]="[data.routerLink]" class="sidenav-nav-link"
+         routerLinkActive="active" *ngIf="data.section === 'settings'">
+        <mat-icon>{{ data.icon }}</mat-icon>
+        <span *ngIf="collapsed" @fadeInOut class="sidenav-link-text">{{ data.label }}</span>
+      </a>
+    </li>
+    <mat-divider style="margin-bottom: 2rem"></mat-divider>
+  </ul>
+</div>

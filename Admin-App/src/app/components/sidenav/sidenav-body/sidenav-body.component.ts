@@ -1,0 +1,33 @@
+import {Component, Input, OnInit} from '@angular/core';
+
+@Component({
+  selector: 'app-sidenav-body',
+  templateUrl: './sidenav-body.component.html',
+  styleUrls: ['./sidenav-body.component.scss']
+})
+export class SidenavBodyComponent implements OnInit {
+
+  @Input() collapsed: boolean = false;
+  @Input() screenWidth: number = 0;
+
+  constructor() {
+  }
+
+  ngOnInit(): void {
+  }
+
+  getBodyClass(): string {
+    let styleClass = '';
+    if (this.collapsed && this.screenWidth > 768) {
+      styleClass = 'body-trimmed';
+    } else if (
+      this.collapsed &&
+      this.screenWidth <= 768 &&
+      this.screenWidth > 0
+    ) {
+      styleClass = 'body-md-screen';
+    }
+    return styleClass;
+  }
+
+}
