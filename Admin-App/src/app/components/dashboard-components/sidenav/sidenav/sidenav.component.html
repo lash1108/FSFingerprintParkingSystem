@@ -10,16 +10,16 @@
   </div>
   <ul class="sidenav-nav">
     <li *ngFor="let data of getFilteredNavData()" class="sidenav-nav-item">
-      <a [routerLinkActiveOptions]="{exact:true}" [routerLink]="[data.routerLink]" class="sidenav-nav-link"
-         routerLinkActive="active" *ngIf="data.section === 'main'">
+      <a *ngIf="data.section === 'main'" [routerLinkActiveOptions]="{exact:true}" [routerLink]="[data.routerLink]"
+         class="sidenav-nav-link" routerLinkActive="active">
         <mat-icon>{{ data.icon }}</mat-icon>
         <span *ngIf="collapsed" @fadeInOut class="sidenav-link-text">{{ data.label }}</span>
       </a>
     </li>
     <mat-divider style="margin-top: auto;"></mat-divider>
-    <li *ngFor="let data of navData" class="sidenav-nav-item" id="settings" >
-      <a [routerLinkActiveOptions]="{exact:true}" [routerLink]="[data.routerLink]" class="sidenav-nav-link"
-         routerLinkActive="active" *ngIf="data.section === 'settings'">
+    <li *ngFor="let data of navData" class="sidenav-nav-item" id="settings">
+      <a *ngIf="data.section === 'settings'" [routerLinkActiveOptions]="{exact:true}" [routerLink]="[data.routerLink]"
+         class="sidenav-nav-link" routerLinkActive="active">
         <mat-icon>{{ data.icon }}</mat-icon>
         <span *ngIf="collapsed" @fadeInOut class="sidenav-link-text">{{ data.label }}</span>
       </a>

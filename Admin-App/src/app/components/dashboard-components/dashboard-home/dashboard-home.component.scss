@@ -1,9 +1,9 @@
-.container-main{
+.container-main {
   display: flex;
   gap: 1rem;
   align-items: center;
 
-  .welcome-dash, .payment-dash{
+  .welcome-dash, .payment-dash {
     height: 75vh;
     display: flex;
     flex-direction: column;
@@ -14,21 +14,24 @@
     }
   }
 
-  .welcome-dash{
+  .welcome-dash {
     width: 65%;
     background-color: rgba(34, 50, 89, 0.8);
-    mat-card-header{
-      mat-card-title{
-        h2{
+
+    mat-card-header {
+      mat-card-title {
+        h2 {
           align-items: center;
           font-size: 2rem;
-          mat-icon{
+
+          mat-icon {
             font-size: 2rem;
             margin-right: 2rem;
           }
         }
       }
     }
+
     mat-card-actions {
       display: flex;
       justify-content: space-between;
@@ -36,10 +39,25 @@
     }
   }
 
-  .payment-dash{
-    max-width:20%;
+  .payment-dash {
+    display: flex;
+    flex-direction: column;
+    max-width: 20%;
     background-color: rgba(52, 53, 62, 0.9);
     align-items: center;
+    justify-content: center;
+
+    .clock-container{
+      display: flex;
+      padding-top: 2rem;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 45%;
+      background-color: #0e0d0d;
+      border-radius: 1rem;
+    }
 
     button {
       display: flex;

@@ -67,7 +67,8 @@
             <mat-form-field appearance="fill">
               <mat-label>Ingresa tu contraseña</mat-label>
               <input [type]="hide ? 'password' : 'text'" matInput placeholder="*********" required>
-              <button (click)="hide = !hide" [attr.aria-label]="hide ? 'Show password' : 'Hide password'" [attr.aria-pressed]="hide"
+              <button (click)="hide = !hide" [attr.aria-label]="hide ? 'Show password' : 'Hide password'"
+                      [attr.aria-pressed]="hide"
                       mat-icon-button matSuffix>
                 <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
               </button>

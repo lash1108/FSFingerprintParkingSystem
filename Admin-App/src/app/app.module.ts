@@ -13,17 +13,24 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
-import {DashboardComponent} from './components/dashboard/dashboard.component';
-import {SidenavComponent} from './components/sidenav/sidenav/sidenav.component';
-import {SidenavUtilComponent} from './components/sidenav/sidenav-util/sidenav-util.component';
-import {SidenavBodyComponent} from './components/sidenav/sidenav-body/sidenav-body.component';
-import { SettingsComponent } from './components/settings/settings.component';
-import { DashboardHomeComponent } from './components/dashboard-home/dashboard-home.component';
-import { ActiveParkComponent } from './components/active-park/active-park.component';
-import { PaymentHistoryComponent } from './components/payment-history/payment-history.component';
-import { ActiveUsersComponent } from './components/active-users/active-users.component';
-import { GenericHistoryComponent } from './components/generic-history/generic-history.component';
-import { GoToDirective } from './directives/go-to.directive';
+import {DashboardComponent} from './components/dashboard-components/dashboard/dashboard.component';
+import {SidenavComponent} from './components/dashboard-components/sidenav/sidenav/sidenav.component';
+import {SidenavUtilComponent} from './components/dashboard-components/sidenav/sidenav-util/sidenav-util.component';
+import {SidenavBodyComponent} from './components/dashboard-components/sidenav/sidenav-body/sidenav-body.component';
+import {SettingsComponent} from './components/dashboard-components/settings/settings.component';
+import {DashboardHomeComponent} from './components/dashboard-components/dashboard-home/dashboard-home.component';
+import {ActiveParkComponent} from './components/dashboard-components/active-park/active-park.component';
+import {PaymentHistoryComponent} from './components/dashboard-components/payment-history/payment-history.component';
+import {ActiveUsersComponent} from './components/dashboard-components/active-users/active-users.component';
+import {GenericHistoryComponent} from './components/dashboard-components/generic-history/generic-history.component';
+import {GoToDirective} from './directives/go-to.directive';
+import {
+  DashboardGenericComponent
+} from './components/dashboard-components/dashboard-generic/dashboard-generic.component';
+import {
+  DashboardGenericUsrComponent
+} from './components/dashboard-components/dashboard-generic-usr/dashboard-generic-usr.component';
+import {ClockComponent} from './components/util/clock/clock.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +47,9 @@ import { GoToDirective } from './directives/go-to.directive';
     ActiveUsersComponent,
     GenericHistoryComponent,
     GoToDirective,
+    DashboardGenericComponent,
+    DashboardGenericUsrComponent,
+    ClockComponent,
   ],
   imports: [
     BrowserModule,

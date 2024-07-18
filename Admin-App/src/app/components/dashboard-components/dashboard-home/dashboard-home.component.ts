@@ -1,5 +1,6 @@
-import { Component, OnInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
-import { GlobalService } from "../../services/global.service";
+import {Component, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {GlobalService} from "../../../services/global.service";
+
 
 @Component({
   selector: 'app-dashboard-home',
@@ -8,11 +9,11 @@ import { GlobalService } from "../../services/global.service";
 })
 export class DashboardHomeComponent implements OnInit {
   @ViewChild('icon') icon: any;
+  typeUsr: number = 0;
 
   constructor(private globalService: GlobalService,
-              private renderer: Renderer2) { }
-
-  typeUsr: number = 0;
+              private renderer: Renderer2) {
+  }
 
   ngOnInit(): void {
     this.globalService.setTypeUser(0);

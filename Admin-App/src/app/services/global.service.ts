@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -6,13 +6,15 @@ import { Injectable } from '@angular/core';
 export class GlobalService {
 
   private typeUser: number = 0;
-  constructor() { }
 
-  getTypeUser(): number{
+  constructor() {
+  }
+
+  getTypeUser(): number {
     return this.typeUser;
   }
 
-  setTypeUser(type: number):void{
+  setTypeUser(type: number): void {
     this.typeUser = type;
   }
 }

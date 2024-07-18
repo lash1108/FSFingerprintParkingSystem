@@ -1,0 +1,78 @@
+.container-main {
+  background-image: url("/assets/img/b2.png");
+  margin: 0;
+  height: 100%;
+  font-family: 'Arial', sans-serif;
+  font-stretch: extra-condensed;
+  color: #fff;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .main-card {
+    width: 80%;
+    height: 90%;
+    background: rgba(93, 135, 135, 0.4);
+    color: #ffffff;
+
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+
+    button {
+      margin-top: 0.8rem;
+    }
+
+    .card-content {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      height: 100%;
+
+      .reloj-card, .data-card {
+        height: 100%;
+        margin: 0 1rem 0 0;
+      }
+
+      .reloj-card, .data-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .data-card {
+        width: 80%;
+        background: rgba(14, 13, 13, 0.8);
+      }
+
+      .reloj-card {
+        width: 20%;
+        background: rgba(255, 255, 255, 0.8);
+        .clock-container {
+          border-radius: 1rem;
+          display: flex;
+          padding-top: 3rem;
+          background-color: #0e0d0d;
+          width: 100%;
+          height: 140px;
+          justify-content: center;
+          align-items: center;
+        }
+
+
+
+        mat-card {
+          color: #ffffff;
+          background: #0e0d0d;
+        }
+
+      }
+    }
+  }
+}
+
+.container-main {
+  background-size: cover;
+}

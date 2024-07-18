@@ -1,0 +1,31 @@
+<div class="container-main">
+  <mat-card class="main-card">
+    <mat-card-header>
+      <mat-card-title>
+        <h2>Bienvenido devuelta</h2>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="card-content">
+      <mat-card class="data-card">
+        <mat-card><p>Fecha de entrada : </p></mat-card>
+        <mat-card><p>Hora de entrada : </p></mat-card>
+        <mat-card><p>Hora de entrada : </p></mat-card>
+        <button [appGoTo]="'/home'" color="warn" mat-button>regresar</button>
+      </mat-card>
+      <mat-card class="reloj-card">
+        <div class="clock-container">
+          <app-clock></app-clock>
+        </div>
+        <mat-card>SubT otal:</mat-card>
+        <mat-card>IVA:</mat-card>
+        <mat-card>TOTAL:</mat-card>
+        <button [appGoTo]="'/home'" color="primary" mat-flat-button>Continuar con el pago</button>
+      </mat-card>
+    </mat-card-content>
+    <mat-card-actions>
+    </mat-card-actions>
+    <mat-card-footer>
+      <small></small>
+    </mat-card-footer>
+  </mat-card>
+</div>
