@@ -1,5 +1,6 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from "@angular/animations";
+import {WebSocketService} from "../../services/web-socket.service";
 
 @Component({
   selector: 'app-home',
@@ -23,15 +24,31 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
 export class HomeComponent implements OnInit {
   rotatedState: number = 0;
   hide = true;
+  greeting: any;
+  name: string = "";
+  connected: boolean = false;
+  warningMessage: string = "";
 
-  constructor() {
+  constructor(private webSocketService:WebSocketService) {
   }
 
   ngOnInit(): void {
+    this.connect();
   }
 
   rotateState = (state: number) => {
     /*0 home | 1 login | 2 signing*/
     this.rotatedState = state
   };
+
+  connect() {
+    this.webSocketService.connect((message) => this.handleMessage(message));
+    this.connected = true;
+  }
+
+  handleMessage(message: any) {
+    this.greeting = message;
+    this.warningMessage = `Received message: ${JSON.stringify(message)}`;  // Convertir el objeto a JSON
+    console.warn(this.warningMessage);  // Imprimir el mensaje en la consola como advertencia
+  }
 }
