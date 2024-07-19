@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {WebSocketService} from "../../services/web-socket.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -24,12 +25,11 @@ import {WebSocketService} from "../../services/web-socket.service";
 export class HomeComponent implements OnInit {
   rotatedState: number = 0;
   hide = true;
-  greeting: any;
   name: string = "";
   connected: boolean = false;
-  warningMessage: string = "";
+  message: string = "";
 
-  constructor(private webSocketService:WebSocketService) {
+  constructor(private webSocketService:WebSocketService, private router:Router) {
   }
 
   ngOnInit(): void {
@@ -47,8 +47,36 @@ export class HomeComponent implements OnInit {
   }
 
   handleMessage(message: any) {
-    this.greeting = message;
-    this.warningMessage = `Received message: ${JSON.stringify(message)}`;  // Convertir el objeto a JSON
-    console.warn(this.warningMessage);  // Imprimir el mensaje en la consola como advertencia
+    if (!message || !message.content) {
+      this.message = 'Received empty or invalid message';
+      console.log(this.message);
+      return;
+    }
+
+    const content = message.content;
+    const match = content.match(/Hello, (\d+)/);
+
+    if (!match) {
+      this.message = 'Received message does not match expected format';
+      console.log(this.message);
+      return;
+    }
+
+    const extractedNumber = match[1];
+    const routes: { [key: string]: string } = {
+      '1': 'generic',
+      '2': 'consult',
+    };
+
+    if (routes[extractedNumber]) {
+      this.message = `Received number: ${extractedNumber}`;
+      localStorage.setItem('fingerprint', extractedNumber);
+      this.router.navigateByUrl(routes[extractedNumber]);
+    } else {
+      this.message = 'Opción no válida';
+    }
+
+    console.log(this.message);
   }
+
 }

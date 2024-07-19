@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {IdleService} from "../../../services/idle.service";
 
 @Component({
   selector: 'app-dashboard-generic-usr',
@@ -7,10 +8,10 @@ import {Component, OnInit} from '@angular/core';
 })
 export class DashboardGenericUsrComponent implements OnInit {
 
-  constructor() {
-  }
+  constructor(private idleService:IdleService) {}
 
   ngOnInit(): void {
+    this.idleService.initialize('fingerprint')
   }
 
 }

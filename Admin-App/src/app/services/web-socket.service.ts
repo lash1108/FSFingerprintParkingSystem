@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import {environment} from "../../environments/environment";
-import {Client} from "stompjs";
 
 @Injectable({
   providedIn: 'root'
@@ -20,23 +19,11 @@ export class WebSocketService {
     console.log("Initialize WebSocket Connection");
     let ws = new SockJS(this.webSocketEndPoint);
     this.stompClient = Stomp.over(ws);
-    this.stompClient.connect({}, (frame: any) => {
+    this.stompClient.connect({}, () => {
       this.stompClient.subscribe(this.topic, (sdkEvent: any) => {
         this.onMessageReceived(sdkEvent, callback);
       });
     }, this.errorCallBack);
-  }
-
-  public disconnect() {
-    if (this.stompClient !== null) {
-      this.stompClient.disconnect();
-    }
-    console.log("Disconnected");
-  }
-
-  public send(message: any) {
-    console.log("Sending message via WebSocket");
-    this.stompClient.send("/app/hello", {}, JSON.stringify(message));
   }
 
   private errorCallBack(error: any) {
@@ -47,7 +34,6 @@ export class WebSocketService {
   }
 
   private onMessageReceived(message: any, callback: (message: any) => void) {
-    console.log("Message Received from Server :: " + message);
     callback(JSON.parse(message.body));
   }
 
