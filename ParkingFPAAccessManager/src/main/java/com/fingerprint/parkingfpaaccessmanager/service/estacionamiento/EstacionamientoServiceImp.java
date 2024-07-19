@@ -90,8 +90,8 @@ public class EstacionamientoServiceImp implements EstacionamientoService {
 
             LocalDateTime exitDate = LocalDateTime.now();
             entryDate = est.getEntrydate();
-            BigDecimal total = utilService.getTotalForDateRange(entryDate, exitDate, 2);
-
+            BigDecimal subtotal = utilService.getTotalForDateRange(entryDate, exitDate, 2);
+            BigDecimal total = utilService.getTotalWithIva(subtotal);
             est.setExitdate(exitDate);
             est.setTotal(total);
             estacionamientoDao.saveOrUpdateTblest(est);
@@ -105,7 +105,9 @@ public class EstacionamientoServiceImp implements EstacionamientoService {
             responseMap.put("login", usr.getLoginusr());
             responseMap.put("exitDate", utilService.getDateAndHourFormated(exitDate).getValue1());
             responseMap.put("exitTime", utilService.getDateAndHourFormated(exitDate).getValue2());
-            responseMap.put("total", total);
+            responseMap.put("subTotal", subtotal.toString());
+            responseMap.put("total", total.toString());
+
 
             return response.okResponse("Registro actualizado", responseMap);
         } else {

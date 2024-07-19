@@ -7,7 +7,7 @@ import { switchMap, tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class IdleService {
-  private inactivityTimeout = 60000;
+  private inactivityTimeout = 600000;
   private idle$: Observable<Event> = new Observable<Event>();
 
   constructor(private router: Router, private ngZone: NgZone) { }
@@ -27,16 +27,41 @@ export class IdleService {
           switchMap(() => timer(this.inactivityTimeout)),
           tap(() => {
             this.ngZone.run(() => {
+              // Primero, guardar los datos antes de eliminar cualquier cosa
+              this.saveBeforeLogout();
+
               // Eliminar el ítem de localStorage al momento de redirigir
-              if (localitmRemove && localStorage.getItem(localitmRemove)) {
-                localStorage.removeItem(localitmRemove);
-              }
+              this.deleteLocalStorage(localitmRemove);
+
               // Redirigir a la página de inicio
-              this.router.navigateByUrl('home');
+              this.router.navigateByUrl('home').then(() => null);
             });
           })
         )
         .subscribe();
     });
   }
+
+  private saveBeforeLogout(): void {
+    // Implementa cualquier lógica para guardar datos antes de redirigir
+    // Ejemplo:
+    const registryData = localStorage.getItem('registry');
+    if (registryData) {
+      // Por ejemplo, podrías guardar el registro en otro lugar o hacer una llamada a una API
+      console.log('Registry Data Before Logout:', registryData);
+    }
+  }
+
+  private deleteLocalStorage(localitmRemove?: string): void {
+    if (localitmRemove && localStorage.getItem(localitmRemove)) {
+      localStorage.removeItem(localitmRemove);
+    }
+
+    if (localStorage.getItem('registry')) {
+      localStorage.removeItem('registry');
+    }
+  }
+
+
 }
+

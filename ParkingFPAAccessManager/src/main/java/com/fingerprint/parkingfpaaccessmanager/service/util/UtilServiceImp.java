@@ -1,9 +1,11 @@
 package com.fingerprint.parkingfpaaccessmanager.service.util;
 
+import com.fingerprint.parkingfpaaccessmanager.model.pojos.response.ResponseJsonString;
 import com.fingerprint.parkingfpaaccessmanager.model.pojos.response.ResponseJsonStringString;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,6 +34,26 @@ public class UtilServiceImp implements UtilService {
     }
 
     @Override
+    public ResponseJsonString getTotalTimeForDateRange(LocalDateTime startDate, LocalDateTime endDate) {
+        ResponseJsonString responseJson = new ResponseJsonString();
+        Duration duration = Duration.between(startDate, endDate);
+
+        long seconds = duration.getSeconds();
+        long hours = seconds / 3600;
+        long minutes = (seconds % 3600) / 60;
+        long remainingSeconds = seconds % 60;
+
+        // Formato en HH:MM:SS
+        String formattedDuration = String.format("%02d:%02d:%02d", hours, minutes, remainingSeconds);
+
+        // Asigna el formato a la respuesta JSON
+        responseJson.setName(formattedDuration);
+
+        return responseJson;
+    }
+
+
+    @Override
     public BigDecimal getTotalForDateRange(LocalDateTime startDate, LocalDateTime endDate, int type) {
         // Obtenemos la duración en segundos entre las dos fechas
         Duration duration = Duration.between(startDate, endDate);
@@ -54,6 +76,13 @@ public class UtilServiceImp implements UtilService {
         }
 
         return price;
+    }
+
+    @Override
+    public BigDecimal getTotalWithIva(BigDecimal subTotal) {
+        BigDecimal ivaRate = new BigDecimal("0.16");
+        BigDecimal ivaAmount = subTotal.multiply(ivaRate).setScale(2, RoundingMode.HALF_UP);
+        return subTotal.add(ivaAmount);
     }
 
 }

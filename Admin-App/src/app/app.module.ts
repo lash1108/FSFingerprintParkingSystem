@@ -31,6 +31,7 @@ import {
   DashboardGenericUsrComponent
 } from './components/dashboard-components/dashboard-generic-usr/dashboard-generic-usr.component';
 import {ClockComponent} from './components/util/clock/clock.component';
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import {ClockComponent} from './components/util/clock/clock.component';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    MatInputModule
+    MatInputModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

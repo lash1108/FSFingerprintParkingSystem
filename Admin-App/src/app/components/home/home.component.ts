@@ -2,6 +2,8 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {WebSocketService} from "../../services/web-socket.service";
 import {Router} from "@angular/router";
+import {RegistryService} from "../../services/registry.service";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-home',
@@ -28,9 +30,11 @@ export class HomeComponent implements OnInit {
   name: string = "";
   connected: boolean = false;
   message: string = "";
+  data: { value1?: string } = {};
 
-  constructor(private webSocketService:WebSocketService, private router:Router) {
-  }
+  constructor(private webSocketService:WebSocketService,
+              private router:Router,
+              private registryService:RegistryService) {}
 
   ngOnInit(): void {
     this.connect();
@@ -63,20 +67,36 @@ export class HomeComponent implements OnInit {
     }
 
     const extractedNumber = match[1];
-    const routes: { [key: string]: string } = {
-      '1': 'generic',
-      '2': 'consult',
-    };
-
-    if (routes[extractedNumber]) {
-      this.message = `Received number: ${extractedNumber}`;
-      localStorage.setItem('fingerprint', extractedNumber);
-      this.router.navigateByUrl(routes[extractedNumber]);
-    } else {
-      this.message = 'Opción no válida';
-    }
+    this.message = "redirecting";
+    this.validateToken(extractedNumber);
 
     console.log(this.message);
   }
 
+  validateToken(token: string): void {
+    this.data = {
+      "value1": token
+    };
+
+    this.registryService.findRegistryByToken(this.data).subscribe(
+      (response) => {
+        if (response.datos.code === 401) {
+          console.log(`Error: ${response.datos.msj}`);
+          localStorage.setItem('fingerprint',token);
+          this.router.navigate(['/generic']);
+
+        } else if (response.datos.code === 200) {
+          console.log('Registro Encontrado:', response.datos.obj.registro);
+          // Guardar datos en localStorage
+          localStorage.setItem('fingerprint', token);
+          localStorage.setItem('registry', JSON.stringify(response.datos));
+          // Redirigir después de guardar los datos
+          this.router.navigate(['/consult']);
+        }
+      },
+      (error) => {
+        console.error('Error en la solicitud:', error);
+      }
+    );
+  }
 }

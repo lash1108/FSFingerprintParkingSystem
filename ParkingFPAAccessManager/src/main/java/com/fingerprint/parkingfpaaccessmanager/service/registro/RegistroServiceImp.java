@@ -13,6 +13,7 @@ import com.fingerprint.parkingfpaaccessmanager.model.pojos.util.ResponseJsonHand
 import com.fingerprint.parkingfpaaccessmanager.service.util.UtilService;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -98,9 +99,14 @@ public class RegistroServiceImp implements RegistroService {
         }
         tblregistry.setEdoregistry(edo);
         registroDao.createOrUpdateRegistry(tblregistry);
+        BigDecimal subTotal = utilService.getTotalForDateRange(tblregistry.getEntryDate(), LocalDateTime.now(), 1);
+        BigDecimal total = utilService.getTotalWithIva(subTotal);
 
         responseMap.put("registro", tblregistry);
         responseMap.put("fecha", utilService.getDateAndHourFormated(tblregistry.getEntryDate()));
+        responseMap.put("duracion", utilService.getTotalTimeForDateRange(tblregistry.getEntryDate(),LocalDateTime.now()));
+        responseMap.put("subTotal", subTotal);
+        responseMap.put("total", total);
 
         return response.okResponse("Registro Encontrado", responseMap);
     }
@@ -126,7 +132,8 @@ public class RegistroServiceImp implements RegistroService {
         LocalDateTime exitDate = LocalDateTime.now();
         est.setEntrydate(entryDate);
         est.setExitdate(exitDate);
-        est.setTotal(utilService.getTotalForDateRange(entryDate, exitDate, 1));
+        BigDecimal subTotal = utilService.getTotalForDateRange(entryDate, exitDate, 1);
+        est.setTotal(utilService.getTotalWithIva(subTotal));
 
         estacionamientoDao.saveOrUpdateTblest(est);
 
