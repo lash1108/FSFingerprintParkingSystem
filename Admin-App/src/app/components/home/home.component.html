@@ -3,7 +3,7 @@
     <div class="fingerprint"></div>
     <h3>Scanning...</h3>
   </div>
-  <div [@flipState]="rotatedState ? 'active' : 'inactive'" class="card-container">
+  <div class="card-container">
     <div class="card-inner">
       <mat-card *ngIf="rotatedState==0"
                 class="msg-container tp-box__side tp-box__front"
@@ -30,7 +30,7 @@
               <button (click)="rotateState(1)" color="primary"
                       mat-raised-button>Log In
               </button>
-              <button (click)="rotateState(2)" color="accent"
+              <button (click)="rotateState(2); creatingUserState(1)" color="accent"
                       mat-raised-button>Sign Up
               </button>
             </div>
@@ -74,7 +74,7 @@
               </button>
             </mat-form-field>
             <button (click)="rotateState(0)" color="warn"
-                    mat-raised-button><-- Back
+                    mat-raised-button><mat-icon>arrow_back</mat-icon> Back
             </button>
           </div>
         </mat-card-actions>
@@ -103,7 +103,7 @@
             <mat-card-subtitle>Por favor use el lector de huellas para crear su usuario</mat-card-subtitle>
             <div class="buttons" style="display: flex; gap: 10%;">
               <button (click)="rotateState(0)" color="warn"
-                      mat-raised-button><-- Back
+                      mat-raised-button><mat-icon>arrow_back</mat-icon> Back
               </button>
             </div>
           </div>

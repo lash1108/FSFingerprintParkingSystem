@@ -34,18 +34,19 @@ export class DashboardGenericComponent implements OnInit {
       name: `${token}`
     };
 
-    this.registryService.setNewRegistry(this.data).subscribe(
-      response => {
-        if (response.datos.code === 200){
-          console.log('Registro exitoso:', response);
-          localStorage.setItem('registry', JSON.stringify(response.datos));
-          this.ngOnInit()
+    this.registryService.setNewRegistry(this.data)
+      .subscribe({
+        next: (response) => {
+          if (response.datos.code === 200) {
+            console.log('Registro exitoso:', response);
+            localStorage.setItem('registry', JSON.stringify(response.datos));
+            this.ngOnInit();
+          }
+        },
+        error: (error) => {
+          console.error('Error al registrar:', error);
         }
-      },
-      error => {
-        console.error('Error al registrar:', error);
-      }
-    );
+      });
   }
 
   populateData(): void {

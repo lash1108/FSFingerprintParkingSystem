@@ -1,28 +1,14 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {animate, state, style, transition, trigger} from "@angular/animations";
+import {Component, OnInit} from '@angular/core';
 import {WebSocketService} from "../../services/web-socket.service";
 import {Router} from "@angular/router";
 import {RegistryService} from "../../services/registry.service";
-import {Observable} from "rxjs";
+import {MatDialog} from "@angular/material/dialog";
+import {SignupComponent} from "../users/signup/signup.component";
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('flipState', [
-      state('active', style({
-        transform: 'rotateY(180deg)'
-      })),
-      state('inactive', style({
-        transform: 'rotateY(0deg)'
-      })),
-      transition('active => inactive', animate('500ms ease-out')),
-      transition('inactive => active', animate('500ms ease-in'))
-    ])
-  ]
-
 })
 export class HomeComponent implements OnInit {
   rotatedState: number = 0;
@@ -31,19 +17,35 @@ export class HomeComponent implements OnInit {
   connected: boolean = false;
   message: string = "";
   data: { value1?: string } = {};
+  creatingUser:number = 0;
 
   constructor(private webSocketService:WebSocketService,
               private router:Router,
-              private registryService:RegistryService) {}
+              private registryService:RegistryService,
+              private dialog:MatDialog) {}
 
   ngOnInit(): void {
     this.connect();
+    this.openDialog();
+  }
+
+  openDialog(): void {
+    this.dialog.open(SignupComponent, {
+      data: {
+        message: 'Este es el contenido del diálogo'
+      }
+    });
   }
 
   rotateState = (state: number) => {
     /*0 home | 1 login | 2 signing*/
     this.rotatedState = state
   };
+
+  creatingUserState = (state: number) => {
+    this.creatingUser = state;
+    console.log(this.creatingUser)
+  }
 
   connect() {
     this.webSocketService.connect((message) => this.handleMessage(message));
@@ -78,25 +80,25 @@ export class HomeComponent implements OnInit {
       "value1": token
     };
 
-    this.registryService.findRegistryByToken(this.data).subscribe(
-      (response) => {
+    this.registryService.findRegistryByToken(this.data)
+      .subscribe({
+      next: (response) => {
         if (response.datos.code === 401) {
           console.log(`Error: ${response.datos.msj}`);
-          localStorage.setItem('fingerprint',token);
-          this.router.navigate(['/generic']);
-
+          localStorage.setItem('fingerprint', token);
+          this.router.navigate(['/generic']).then(() => null);
         } else if (response.datos.code === 200) {
           console.log('Registro Encontrado:', response.datos.obj.registro);
           // Guardar datos en localStorage
           localStorage.setItem('fingerprint', token);
           localStorage.setItem('registry', JSON.stringify(response.datos));
           // Redirigir después de guardar los datos
-          this.router.navigate(['/consult']);
+          this.router.navigate(['/consult']).then(() => null);
         }
       },
-      (error) => {
+      error: (error) => {
         console.error('Error en la solicitud:', error);
       }
-    );
+    });
   }
 }
