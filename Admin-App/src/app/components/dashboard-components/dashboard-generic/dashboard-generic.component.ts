@@ -10,13 +10,14 @@ import {RegistryService} from "../../../services/registry.service";
 export class DashboardGenericComponent implements OnInit {
   token: number = 0;
   data: { name?: string } = {};
-  fechaEntrada:string = "";
-  horaEntrada:string = "";
+  fechaEntrada: string = "";
+  horaEntrada: string = "";
 
   constructor(
     private idleService: IdleService,
     private registryService: RegistryService
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.idleService.initialize('fingerprint');
@@ -70,9 +71,9 @@ export class DashboardGenericComponent implements OnInit {
     }
   }
 
-  deleteLocalStorage():void{
-    if (localStorage.getItem('registry')!=null &&
-      localStorage.getItem('fingerprint')!=null){
+  deleteLocalStorage(): void {
+    if (localStorage.getItem('registry') != null &&
+      localStorage.getItem('fingerprint') != null) {
       localStorage.removeItem('registry');
       localStorage.removeItem('fingerprint');
     }

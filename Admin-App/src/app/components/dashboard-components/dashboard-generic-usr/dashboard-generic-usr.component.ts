@@ -10,10 +10,11 @@ export class DashboardGenericUsrComponent implements OnInit {
   fechaEntrada: string = "";
   horaEntrada: string = "";
   tiempoUso: string = "";
-  subtotal: number  = 0;
+  subtotal: number = 0;
   total: number = 0;
 
-  constructor(private idleService: IdleService) {}
+  constructor(private idleService: IdleService) {
+  }
 
   ngOnInit(): void {
     this.idleService.initialize('fingerprint');
@@ -44,9 +45,9 @@ export class DashboardGenericUsrComponent implements OnInit {
     }
   }
 
-  deleteLocalStorage():void{
-    if (localStorage.getItem('registry')!=null &&
-      localStorage.getItem('fingerprint')!=null){
+  deleteLocalStorage(): void {
+    if (localStorage.getItem('registry') != null &&
+      localStorage.getItem('fingerprint') != null) {
       localStorage.removeItem('registry');
       localStorage.removeItem('fingerprint');
     }

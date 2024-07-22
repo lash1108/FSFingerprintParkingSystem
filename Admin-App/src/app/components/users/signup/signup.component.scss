@@ -1,0 +1,33 @@
+*{
+color: #f3f3f3;
+}
+.main-container{
+  .mat-dialog-content{
+    height: 100vh !important;
+
+    .head-body-form{
+      width: 100% !important;
+      display: flex !important;
+      justify-content: space-between !important;
+
+      .email-field,.username-field{
+        width: 48% !important;
+      }
+    }
+
+    .fullname-field,.password-field{
+      width: 100% !important;
+      margin-top: 2rem !important;
+    }
+  }
+
+  .mat-dialog-actions{
+    margin-top: 1rem !important;
+    display: flex !important;
+    justify-content: center !important;
+
+    button{
+      width: 40% !important;
+    }
+  }
+}

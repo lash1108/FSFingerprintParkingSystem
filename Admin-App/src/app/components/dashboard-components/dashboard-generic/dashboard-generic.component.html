@@ -14,12 +14,13 @@
       <mat-card class="data-card">
         <mat-card class="data-card-card">
           <p>Fecha de entrada :</p>
-          <p class="dataFromJson">{{fechaEntrada}}</p></mat-card>
+          <p class="dataFromJson">{{ fechaEntrada }}</p></mat-card>
         <mat-card class="data-card-card">
           <p>Hora de entrada :</p>
-          <p class="dataFromJson">{{horaEntrada}}</p></mat-card>
-        <button [appGoTo]="'/home'" (click)="deleteLocalStorage()"
-                color="primary" mat-flat-button>Continuar</button>
+          <p class="dataFromJson">{{ horaEntrada }}</p></mat-card>
+        <button (click)="deleteLocalStorage()" [appGoTo]="'/home'"
+                color="primary" mat-flat-button>Continuar
+        </button>
       </mat-card>
     </mat-card-content>
     <mat-card-footer>

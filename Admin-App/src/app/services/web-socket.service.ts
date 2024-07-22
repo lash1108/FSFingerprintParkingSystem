@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import {environment} from "../../environments/environment";
@@ -10,10 +10,11 @@ export class WebSocketService {
 
   private backendUrl = environment.backendURL;
   private webSocketEndPoint: string = `${this.backendUrl}/ws`;
-  private topic:string = '/topic/greetings';
-  private stompClient:any;
+  private topic: string = '/topic/greetings';
+  private stompClient: any;
 
-  constructor() { }
+  constructor() {
+  }
 
   public connect(callback: (message: any) => void) {
     console.log("Initialize WebSocket Connection");

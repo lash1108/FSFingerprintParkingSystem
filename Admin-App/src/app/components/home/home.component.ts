@@ -4,6 +4,8 @@ import {Router} from "@angular/router";
 import {RegistryService} from "../../services/registry.service";
 import {MatDialog} from "@angular/material/dialog";
 import {SignupComponent} from "../users/signup/signup.component";
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-home',
@@ -17,29 +19,37 @@ export class HomeComponent implements OnInit {
   connected: boolean = false;
   message: string = "";
   data: { value1?: string } = {};
-  creatingUser:number = 0;
+  creatingUser: number = 0;
+  protected readonly localStorage = localStorage;
 
-  constructor(private webSocketService:WebSocketService,
-              private router:Router,
-              private registryService:RegistryService,
-              private dialog:MatDialog) {}
+  constructor(private webSocketService: WebSocketService,
+              private router: Router,
+              private registryService: RegistryService,
+              private dialog: MatDialog) {
+  }
 
   ngOnInit(): void {
     this.connect();
-    this.openDialog();
+    //this.openDialog();
   }
 
   openDialog(): void {
-    this.dialog.open(SignupComponent, {
-      data: {
-        message: 'Este es el contenido del diálogo'
+    const dialogRef = this.dialog.open(SignupComponent, {
+      width: '50%',  // Ajusta el ancho del diálogo
+      height: '85%'  // Ajusta la altura del diálogo
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'undefined' || result == undefined){
+        localStorage.removeItem('fingerprint');
       }
     });
   }
 
+
   rotateState = (state: number) => {
     /*0 home | 1 login | 2 signing*/
-    this.rotatedState = state
+    this.rotatedState = state;
   };
 
   creatingUserState = (state: number) => {
@@ -82,23 +92,42 @@ export class HomeComponent implements OnInit {
 
     this.registryService.findRegistryByToken(this.data)
       .subscribe({
-      next: (response) => {
-        if (response.datos.code === 401) {
-          console.log(`Error: ${response.datos.msj}`);
-          localStorage.setItem('fingerprint', token);
-          this.router.navigate(['/generic']).then(() => null);
-        } else if (response.datos.code === 200) {
-          console.log('Registro Encontrado:', response.datos.obj.registro);
-          // Guardar datos en localStorage
-          localStorage.setItem('fingerprint', token);
-          localStorage.setItem('registry', JSON.stringify(response.datos));
-          // Redirigir después de guardar los datos
-          this.router.navigate(['/consult']).then(() => null);
+        next: (response) => {
+          if (response.datos.code === 401) {
+            console.log(`Error: ${response.datos.msj}`);
+            localStorage.setItem('fingerprint', token);
+            if (this.creatingUser == 1) {
+              this.openDialog();
+              return
+            } else {
+              this.router.navigate(['/generic']).then(() => null);
+            }
+          } else if (response.datos.code === 200) {
+            if (this.creatingUser == 1) {
+              // Lanza error de que ya hay un usuario con ese token
+              Swal.fire({
+                icon: 'error',
+                title: 'Ooops...',
+                text: 'Ya hay un usuario con esa huella'
+              }).then(() => {
+                localStorage.removeItem('fingerprint');
+                this.rotateState(0);
+                this.creatingUser = 0;
+              });
+              return
+            } else {
+              console.log('Registro Encontrado:', response.datos.obj.registro);
+              // Guardar datos en localStorage
+              localStorage.setItem('fingerprint', token);
+              localStorage.setItem('registry', JSON.stringify(response.datos));
+              // Redirigir después de guardar los datos
+              this.router.navigate(['/consult']).then(() => null);
+            }
+          }
+        },
+        error: (error) => {
+          console.error('Error en la solicitud:', error);
         }
-      },
-      error: (error) => {
-        console.error('Error en la solicitud:', error);
-      }
-    });
+      });
   }
 }

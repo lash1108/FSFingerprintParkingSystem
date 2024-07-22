@@ -1,7 +1,7 @@
-import { Injectable, NgZone } from '@angular/core';
-import { Router } from '@angular/router';
-import { fromEvent, Observable, merge, timer } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import {Injectable, NgZone} from '@angular/core';
+import {Router} from '@angular/router';
+import {fromEvent, merge, Observable, timer} from 'rxjs';
+import {switchMap, tap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,8 @@ export class IdleService {
   private inactivityTimeout = 600000;
   private idle$: Observable<Event> = new Observable<Event>();
 
-  constructor(private router: Router, private ngZone: NgZone) { }
+  constructor(private router: Router, private ngZone: NgZone) {
+  }
 
   public initialize(localitmRemove?: string): void {
     // Detectar actividad del usuario

@@ -1,7 +1,118 @@
-<h1 mat-dialog-title>Dialog Title</h1>
-<div mat-dialog-content>
-  <p>{{ data.message }}</p>
-</div>
-<div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="true">Ok</button>
+<div class="main-container">
+  <div mat-dialog-title>
+    <h1>Registrando nuevo usuario</h1>
+  </div>
+
+  <div mat-dialog-content class="mat-dialog-content">
+    <form [formGroup]="form" (ngSubmit)="saveUser()">
+
+      <div class="head-body-form">
+        <mat-form-field appearance="fill" class="example-full-width email-field">
+          <mat-label>Email</mat-label>
+          <input
+            [errorStateMatcher]="matcher"
+            formControlName="email"
+            matInput
+            placeholder="Ex. pat@example.com"
+            type="email"
+          >
+          <mat-hint *ngIf="form.get('email')?.valid && form.get('email')?.touched">
+            Looks good!
+          </mat-hint>
+          <mat-error *ngIf="form.get('email')?.hasError('required')">
+            Email is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="form.get('email')?.hasError('email')">
+            Please enter a valid email address
+          </mat-error>
+          <mat-error *ngIf="form.get('email')?.hasError('pattern')">
+            The email format is invalid
+          </mat-error>
+          <mat-error *ngIf="form.get('email')?.hasError('minlength')">
+            Email must be at least 5 characters long
+          </mat-error>
+          <mat-error *ngIf="form.get('email')?.hasError('maxlength')">
+            Email must be less than 255 characters long
+          </mat-error>
+          <mat-error *ngIf="form.get('email')?.hasError('emailTaken')">
+            Email is already taken
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="example-full-width username-field">
+          <mat-label>User Name</mat-label>
+          <input [errorStateMatcher]="matcher" formControlName="username" matInput placeholder="Ex. user123" type="text">
+          <mat-hint *ngIf="form.get('username')?.valid && form.get('username')?.touched">Looks good!</mat-hint>
+          <mat-error *ngIf="form.get('username')?.hasError('required')">
+            User Name is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="form.get('username')?.hasError('minlength')">
+            User Name must be at least 3 characters long
+          </mat-error>
+          <mat-error *ngIf="form.get('username')?.hasError('maxlength')">
+            User Name cannot be more than 20 characters long
+          </mat-error>
+          <mat-error *ngIf="form.get('username')?.hasError('pattern')">
+            User Name can only contain letters, numbers, and underscores
+          </mat-error>
+          <mat-error *ngIf="form.get('username')?.hasError('usernameTaken')">
+            User Name is already <strong>taken</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="fill" class="example-full-width fullname-field">
+        <mat-label>Full name</mat-label>
+        <input [errorStateMatcher]="matcher" formControlName="name" matInput placeholder="Ex. Walter Hartwell White" type="text">
+        <mat-hint *ngIf="form.get('name')?.valid && form.get('name')?.touched">Looks good!</mat-hint>
+        <mat-error *ngIf="form.get('name')?.hasError('required')">
+          Full Name is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="form.get('name')?.hasError('minlength')">
+          Full Name must be at least 8 characters long
+        </mat-error>
+        <mat-error *ngIf="form.get('name')?.hasError('maxlength')">
+          Full Name cannot be more than 50 characters long
+        </mat-error>
+        <mat-error *ngIf="form.get('name')?.hasError('pattern')">
+          Full Name can only contain letters
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="example-full-width password-field">
+        <mat-label>Password</mat-label>
+        <input
+          [errorStateMatcher]="matcher"
+          formControlName="password"
+          matInput
+          [type]="showPassword ? 'text' : 'password'"
+          placeholder="Enter your password"
+        >
+        <button mat-icon-button matSuffix (click)="togglePasswordVisibility()">
+          <mat-icon>{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-hint *ngIf="form.get('password')?.valid && form.get('password')?.touched">
+          Password meets the requirements
+        </mat-hint>
+        <mat-error *ngIf="form.get('password')?.hasError('required')">
+          Password is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="form.get('password')?.hasError('minlength')">
+          Password must be at least 8 characters long
+        </mat-error>
+        <mat-error *ngIf="form.get('password')?.hasError('maxlength')">
+          Password cannot be more than 20 characters long
+        </mat-error>
+        <mat-error *ngIf="form.get('password')?.hasError('pattern')">
+          Password must include at least one uppercase letter, one lowercase letter, one number, and one special character
+        </mat-error>
+      </mat-form-field>
+
+      <div mat-dialog-actions class="mat-dialog-actions">
+        <button [mat-dialog-close]="true" mat-raised-button color="warn" (click)="unsetTokenFromLocalStorage()">Cancel</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Save</button>
+      </div>
+
+    </form>
+  </div>
 </div>

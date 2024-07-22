@@ -32,8 +32,10 @@ import {
 } from './components/dashboard-components/dashboard-generic-usr/dashboard-generic-usr.component';
 import {ClockComponent} from './components/util/clock/clock.component';
 import {HttpClientModule} from "@angular/common/http";
-import { SignupComponent } from './components/users/signup/signup.component';
+import {SignupComponent} from './components/users/signup/signup.component';
 import {MatDialogModule} from "@angular/material/dialog";
+import {MatChipsModule} from "@angular/material/chips";
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -69,7 +71,9 @@ import {MatDialogModule} from "@angular/material/dialog";
     MatInputModule,
     MatInputModule,
     HttpClientModule,
-    MatDialogModule
+    MatDialogModule,
+    MatChipsModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

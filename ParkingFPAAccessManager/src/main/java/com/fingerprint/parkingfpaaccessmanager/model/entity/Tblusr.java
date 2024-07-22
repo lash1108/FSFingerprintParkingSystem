@@ -18,7 +18,7 @@ public class Tblusr {
     @Column(name = "CVEUSR")
     private Long cveusr;
 
-    @Column(name = "NAMEUSR", length = 200, unique = true)
+    @Column(name = "NAMEUSR", length = 200)
     @NonNull
     private String nameusr;
 

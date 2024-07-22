@@ -8,24 +8,25 @@
     <mat-card-content class="card-content">
       <mat-card class="data-card">
         <mat-card class="data-card-card"><p>Fecha de entrada : </p>
-          <p class="dataFromJson">{{fechaEntrada}}</p>
+          <p class="dataFromJson">{{ fechaEntrada }}</p>
         </mat-card>
         <mat-card class="data-card-card"><p>Hora de entrada : </p>
-          <p class="dataFromJson">{{horaEntrada}}</p>
+          <p class="dataFromJson">{{ horaEntrada }}</p>
         </mat-card>
         <mat-card class="data-card-card"><p>Tiempo de uso: </p>
-          <p class="dataFromJson">{{tiempoUso}}</p>
+          <p class="dataFromJson">{{ tiempoUso }}</p>
         </mat-card>
-        <button [appGoTo]="'/home'" (click)="deleteLocalStorage()"
-                color="warn" mat-button>regresar</button>
+        <button (click)="deleteLocalStorage()" [appGoTo]="'/home'"
+                color="warn" mat-button>regresar
+        </button>
       </mat-card>
       <mat-card class="reloj-card">
         <div class="clock-container">
           <app-clock></app-clock>
         </div>
-        <mat-card>SubTotal: <p class="dataFromJson">{{subtotal}} MNX</p></mat-card>
+        <mat-card>SubTotal: <p class="dataFromJson">{{ subtotal }} MNX</p></mat-card>
         <mat-card>IVA: <p class="dataFromJson">16%</p></mat-card>
-        <mat-card>TOTAL: <p class="dataFromJson">{{total}} MNX</p></mat-card>
+        <mat-card>TOTAL: <p class="dataFromJson">{{ total }} MNX</p></mat-card>
         <button [appGoTo]="'/home'" color="primary" mat-flat-button>Continuar con el pago</button>
       </mat-card>
     </mat-card-content>

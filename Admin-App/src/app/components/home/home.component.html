@@ -23,7 +23,7 @@
         </mat-card-content>
 
         <mat-card-actions
-          style="margin-top: auto; display: flex; flex-direction: column; margin-left: 1.6rem; margin-bottom: 10%; margin-right: 2rem">
+          style="display: flex; flex-direction: column; margin: auto 2rem 10% 1.6rem;">
           <div class="login-info" style="display: flex; flex-direction: column; gap: 8px;">
             <mat-card-subtitle>¿Ya eres un usuario pensionado o deseas convertirte en uno?</mat-card-subtitle>
             <div class="buttons" style="display: flex; gap: 10%;">
@@ -55,7 +55,7 @@
         </mat-card-content>
 
         <mat-card-actions
-          style="margin-top: auto; display: flex; flex-direction: column; margin-left: 1.6rem; margin-bottom: 10%; margin-right: 2rem">
+          style="display: flex; flex-direction: column; margin: auto 2rem 10% 1.6rem;">
           <div class="login-info" style="display: flex; flex-direction: column; gap: 8px;">
             <mat-form-field appearance="fill">
               <mat-label>Introduce tu email o tu nombre de usuario</mat-label>
@@ -74,7 +74,9 @@
               </button>
             </mat-form-field>
             <button (click)="rotateState(0)" color="warn"
-                    mat-raised-button><mat-icon>arrow_back</mat-icon> Back
+                    mat-raised-button>
+              <mat-icon>arrow_back</mat-icon>
+              Back
             </button>
           </div>
         </mat-card-actions>
@@ -95,15 +97,26 @@
           <mat-card-subtitle>
             <p style="font-size: 1rem; margin-left: 1.6rem;">Para comenzar por favor use el lector de huellas</p>
           </mat-card-subtitle>
+
+          <div class="chip-container">
+            <mat-chip-list class="chip-list" >
+              <mat-chip *ngIf="!localStorage.getItem('fingerprint')"
+              style="background-color: #fa5252">Esperado una huella válida</mat-chip>
+              <mat-chip *ngIf="localStorage.getItem('fingerprint')"
+              style="background-color: forestgreen">Confirmado</mat-chip>
+            </mat-chip-list>
+          </div>
         </mat-card-content>
 
         <mat-card-actions
-          style="margin-top: auto; display: flex; flex-direction: column; margin-left: 1.6rem; margin-bottom: 10%; margin-right: 2rem">
+          style="display: flex; flex-direction: column; margin: auto 2rem 10% 1.6rem;">
           <div class="login-info" style="display: flex; flex-direction: column; gap: 8px;">
             <mat-card-subtitle>Por favor use el lector de huellas para crear su usuario</mat-card-subtitle>
             <div class="buttons" style="display: flex; gap: 10%;">
-              <button (click)="rotateState(0)" color="warn"
-                      mat-raised-button><mat-icon>arrow_back</mat-icon> Back
+              <button (click)="rotateState(0); creatingUserState(0)" color="warn"
+                      mat-raised-button>
+                <mat-icon>arrow_back</mat-icon>
+                Back
               </button>
             </div>
           </div>

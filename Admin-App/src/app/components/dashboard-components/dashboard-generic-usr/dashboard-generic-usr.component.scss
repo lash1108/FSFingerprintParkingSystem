@@ -11,7 +11,7 @@
   justify-content: center;
   align-items: center;
 
-  .dataFromJson{
+  .dataFromJson {
     width: 98%;
     text-align: right;
   }
@@ -52,8 +52,8 @@
         font-size: x-large;
         background: rgba(14, 13, 13, 0.8);
 
-        .data-card-card{
-          p{
+        .data-card-card {
+          p {
             padding: 0.4rem;
           }
         }
@@ -62,6 +62,7 @@
       .reloj-card {
         width: 20%;
         background: rgba(255, 255, 255, 0.8);
+
         .clock-container {
           border-radius: 1rem;
           display: flex;
@@ -72,7 +73,6 @@
           justify-content: center;
           align-items: center;
         }
-
 
 
         mat-card {

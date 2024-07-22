@@ -45,7 +45,17 @@
     position: relative;
     width: 49%;
     height: 100%;
+
+    .chip-container{
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20%;
+    }
   }
+
+
 
   .msg-container {
     padding: 1rem;

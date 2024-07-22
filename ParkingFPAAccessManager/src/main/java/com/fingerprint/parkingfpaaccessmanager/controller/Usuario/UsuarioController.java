@@ -8,7 +8,6 @@ import com.fingerprint.parkingfpaaccessmanager.model.pojos.response.ResponseJson
 import com.fingerprint.parkingfpaaccessmanager.model.pojos.response.ResponseJsonGeneric;
 import com.fingerprint.parkingfpaaccessmanager.model.pojos.response.ResponseJsonLongString;
 import com.fingerprint.parkingfpaaccessmanager.service.usuario.UsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +21,11 @@ import static java.util.Objects.nonNull;
 @RequestMapping({"/usr"})
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
+
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
 
     @PostMapping(value = {"/createOrUpdateUsr"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseJsonGeneric> createOrUpdateUsr(@RequestBody ConsumeJsonGeneric consume) {
@@ -39,17 +41,17 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.deleteUsrByCveusr(consume));
     }
 
-    @GetMapping(value = {"/findAllUsers"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = {"/findAllUsers"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseJsonGeneric> findAllUsers(@RequestBody ConsumeJsonString consume) {
         return ResponseEntity.ok(usuarioService.findAllUsersByTypeusr(consume.getName()));
     }
 
-    @GetMapping(value = {"/findUserByCveusr"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = {"/findUserByCveusr"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseJsonGeneric> findUserByCveusr(@RequestBody ConsumeJsonLong consume) {
         return ResponseEntity.ok(usuarioService.findUserByCveusr(consume));
     }
 
-    @GetMapping(value = {"/validEmail"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = {"/validEmail"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseJsonLongString> validEmail(@RequestBody ConsumeJsonString consume) {
         ResponseJsonLongString response = new ResponseJsonLongString();
         ResponseJsonBoolean validEmail = usuarioService.existUsrByParam(consume.getName(), 1);
@@ -64,7 +66,7 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping(value = {"/validLogin"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = {"/validLogin"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseJsonLongString> validLogin(@RequestBody ConsumeJsonString consume) {
         ResponseJsonLongString response = new ResponseJsonLongString();
         ResponseJsonBoolean validEmail = usuarioService.existUsrByParam(consume.getName(), 2);
@@ -79,19 +81,19 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping(value = {"/findUsrByEmailAndPassword"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = {"/findUsrByEmailAndPassword"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseJsonGeneric> findUsrByParamAndPassword(@RequestBody ConsumeJsonStringString consume) {
         return ResponseEntity.ok(usuarioService.findUsrByParamAndPassword(
                 consume.getValue1(), consume.getValue2(), 1));
     }
 
-    @GetMapping(value = {"/findUserByLoginAndPassword"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = {"/findUserByLoginAndPassword"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseJsonGeneric> findUserByLoginAndPassword(@RequestBody ConsumeJsonStringString consume) {
         return ResponseEntity.ok(usuarioService.findUsrByParamAndPassword(
                 consume.getValue1(), consume.getValue2(), 2));
     }
 
-    @GetMapping(value = {"/findUserByToken"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = {"/findUserByToken"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseJsonGeneric> findUserByToken(@RequestBody ConsumeJsonString consume) {
         return ResponseEntity.ok(usuarioService.findUsrByParamAndPassword(
                 consume.getName(), null, 3));
