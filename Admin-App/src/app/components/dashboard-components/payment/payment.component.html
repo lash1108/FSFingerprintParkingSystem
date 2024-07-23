@@ -1,0 +1,204 @@
+<div class="main-body">
+  <div class="advice">Esta es una Pantalla de pago falsa para seguir el flujo de la aplicacion
+    No se guardara ningun dato sensible</div>
+
+  <mat-card class="main-card">
+    <mat-card class="usr-info">
+      <mat-card-title><h1>Informacion del pago</h1></mat-card-title>
+      <mat-card-content>
+        <mat-card class="user-card">
+          <mat-card-subtitle>Usuario</mat-card-subtitle>
+          <mat-form-field class="example-full-width" appearance="fill">
+            <input matInput disabled value={{usuario}}>
+          </mat-form-field>
+        </mat-card>
+        <div class="time-container">
+          <mat-card class="time-card">
+            <mat-card-subtitle>Fecha de entrada</mat-card-subtitle>
+            <mat-form-field class="example-full-width" appearance="fill">
+              <input matInput disabled value={{fechaEntrada}}>
+            </mat-form-field>
+            <mat-divider></mat-divider>
+            <mat-card-subtitle style="padding: 1rem 0 0 0 !important;">Hora de entrada</mat-card-subtitle>
+            <mat-form-field class="example-full-width" appearance="fill">
+              <input matInput disabled value={{horaEntrada}}>
+            </mat-form-field>
+          </mat-card>
+          <mat-card class="time-card">
+            <mat-card-subtitle>Fecha de salida</mat-card-subtitle>
+            <mat-form-field class="example-full-width" appearance="fill">
+              <input matInput disabled value={{fechaEntrada}}>
+            </mat-form-field>
+            <mat-divider></mat-divider>
+            <mat-card-subtitle style="padding: 1rem 0 0 0 !important;">Hora de salida</mat-card-subtitle>
+            <mat-form-field class="example-full-width" appearance="fill">
+              <input matInput disabled value={{horaEntrada}}>
+            </mat-form-field>
+          </mat-card>
+        </div>
+        <div class="subTotal-container">
+          <mat-card class="subTotal-card">
+            <mat-card-subtitle>Duración</mat-card-subtitle>
+            <mat-form-field class="example-full-width" appearance="fill">
+              <input matInput disabled value={{tiempoUso}}>
+            </mat-form-field>
+          </mat-card>
+          <mat-card class="subTotal-card">
+            <mat-card-subtitle>Sub Total</mat-card-subtitle>
+            <mat-form-field class="example-full-width" appearance="fill">
+              <input matInput disabled value={{subtotal}}>
+            </mat-form-field>
+          </mat-card>
+        </div>
+        <div class="total-container">
+          <mat-card class="total-card" id="iva"><h3>IVA 16%</h3></mat-card>
+          <mat-card class="total-card" id="total">
+            <mat-card-subtitle>Total</mat-card-subtitle>
+            <mat-form-field class="example-full-width" appearance="fill">
+              <input matInput disabled value={{total}}>
+            </mat-form-field>
+          </mat-card>
+        </div>
+        <!--<mat-checkbox>
+          /*class="example-margin"
+          [checked]=""
+          [indeterminate]=""
+          (change)=""*/>
+        >
+          <h3>Requiere factura?</h3>
+        </mat-checkbox>-->
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="payment-method">
+      <mat-card-title>Método de pago</mat-card-title>
+      <mat-radio-group [(ngModel)]="labelPosition">
+        <div class="paypal-container">
+          <mat-card class="paypal-method">
+            <mat-card-title> <mat-radio-button  value="paypal"></mat-radio-button>Paypal</mat-card-title>
+            <mat-card-content *ngIf="labelPosition === 'paypal'">
+              <form [formGroup]="formPP" (ngSubmit)="saveAndUnsetRegistry()">
+                <mat-form-field appearance="fill" class="crediCard-form-field">
+                  <mat-label>Email or Phone number</mat-label>
+                  <input
+                    [errorStateMatcher]="matcher"
+                    formControlName="emailOrPhone"
+                    matInput
+                    placeholder="722123...correo@gmail"
+                    type="text"
+                  >
+                  <mat-hint *ngIf="formCC.get('emailOrPhone')?.valid && formCC.get('emailOrPhone')?.touched">
+                    Looks good!
+                  </mat-hint>
+                  <mat-error *ngIf="formCC.get('emailOrPhone')?.hasError('required')">
+                    email or phone is <strong>required</strong>
+                  </mat-error>
+                  <mat-error *ngIf="formCC.get('emailOrPhone')?.hasError('pattern')">
+                    Please enter a <strong>valid</strong> email or phone
+                  </mat-error>
+                  <mat-error *ngIf="formCC.get('emailOrPhone')?.hasError('minlength')">
+                    email or phone must be at <strong>least</strong> 5 characters long
+                  </mat-error>
+                  <mat-error *ngIf="formCC.get('emailOrPhone')?.hasError('maxlength')">
+                    email or phone must be <strong>less</strong> than 254 characters long
+                  </mat-error>
+                </mat-form-field>
+              </form>
+                <a style="color: #5AE6FF"
+                   href="https://www.paypal.com/authflow/email-recovery/?contextId=&redirectUri=%252Fsignin">Forgot email?</a>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="creditCard-container">
+          <mat-card class="creditcard-method">
+            <mat-card-title><mat-radio-button  value="creditcard"></mat-radio-button>Tarjeta de credito</mat-card-title>
+            <mat-card-content *ngIf="labelPosition === 'creditcard'">
+              <form [formGroup]="formCC" (ngSubmit)="saveAndUnsetRegistry()">
+                <div class="cc-form-container">
+                  <mat-form-field appearance="fill" class="crediCard-form-field" id="ccn-number">
+                    <mat-label>Numero de tarjeta</mat-label>
+                    <input
+                      [errorStateMatcher]="matcher"
+                      formControlName="creditcardNumber"
+                      matInput
+                      placeholder="12345678910111213"
+                      type="text"
+                    >
+                    <mat-hint *ngIf="formCC.get('creditcardNumber')?.valid && formCC.get('creditcardNumber')?.touched">
+                      Looks good!
+                    </mat-hint>
+                    <mat-error *ngIf="formCC.get('creditcardNumber')?.hasError('required')">
+                      Credit card number is <strong>required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="formCC.get('creditcardNumber')?.hasError('pattern')">
+                      Please enter a <strong>valid</strong> Credit card number
+                    </mat-error>
+                    <mat-error *ngIf="formCC.get('creditcardNumber')?.hasError('minlength')">
+                      Credit card number must be at <strong>least</strong> 13 characters long
+                    </mat-error>
+                    <mat-error *ngIf="formCC.get('creditcardNumber')?.hasError('maxlength')">
+                      Credit card number must be <strong>less</strong> than 19 characters long
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-form-field appearance="fill" class="crediCard-form-field" id="ccn-date">
+                    <mat-label>Fecha de expiración</mat-label>
+                    <input
+                      [errorStateMatcher]="matcher"
+                      formControlName="expirationDate"
+                      matInput
+                      placeholder="01/23"
+                      type="text"
+                    >
+                    <mat-hint *ngIf="formCC.get('expirationDate')?.valid && formCC.get('expirationDate')?.touched">
+                      Looks good!
+                    </mat-hint>
+                    <mat-error *ngIf="formCC.get('expirationDate')?.hasError('required')">
+                      Expiration date is <strong>required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="formCC.get('expirationDate')?.hasError('pattern')">
+                      Please enter a <strong>valid</strong> Expiration date
+                    </mat-error>
+                    <mat-error *ngIf="formCC.get('expirationDate')?.hasError('minlength')">
+                      Expiration date must be at <strong>least</strong> 4 characters long
+                    </mat-error>
+                    <mat-error *ngIf="formCC.get('expirationDate')?.hasError('maxlength')">
+                      Expiration date must be <strong>less</strong> than 4 characters long
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-form-field appearance="fill" class="crediCard-form-field" id="ccn-ccv">
+                    <mat-label>Código de seguridad</mat-label>
+                    <input
+                      [errorStateMatcher]="matcher"
+                      formControlName="ccv"
+                      matInput
+                      placeholder="123"
+                      type="text"
+                    >
+                    <mat-hint *ngIf="formCC.get('ccv')?.valid && formCC.get('ccv')?.touched">
+                      Looks good!
+                    </mat-hint>
+                    <mat-error *ngIf="formCC.get('ccv')?.hasError('required')">
+                      ccv is <strong>required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="formCC.get('ccv')?.hasError('pattern')">
+                      Please enter a <strong>valid</strong> ccv
+                    </mat-error>
+                    <mat-error *ngIf="formCC.get('ccv')?.hasError('minlength')">
+                      CCV must be at <strong>least</strong> 3 characters long
+                    </mat-error>
+                    <mat-error *ngIf="formCC.get('ccv')?.hasError('maxlength')">
+                      ccv must be <strong>less</strong> than 4 characters long
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </form>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-radio-group>
+      <div class="payment-method-actions">
+        <button mat-raised-button color="primary" [appGoTo]="'consult'">Regresar</button>
+        <button mat-raised-button color="accent" (click)="saveAndUnsetRegistry()">Continuar</button>
+      </div>
+    </mat-card>
+  </mat-card>
+</div>

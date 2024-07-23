@@ -46,7 +46,6 @@ export class HomeComponent implements OnInit {
     });
   }
 
-
   rotateState = (state: number) => {
     /*0 home | 1 login | 2 signing*/
     this.rotatedState = state;
@@ -130,4 +129,5 @@ export class HomeComponent implements OnInit {
         }
       });
   }
+
 }

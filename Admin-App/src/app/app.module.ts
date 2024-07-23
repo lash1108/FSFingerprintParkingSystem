@@ -35,7 +35,10 @@ import {HttpClientModule} from "@angular/common/http";
 import {SignupComponent} from './components/users/signup/signup.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatChipsModule} from "@angular/material/chips";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { PaymentComponent } from './components/dashboard-components/payment/payment.component';
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatRadioModule} from "@angular/material/radio";
 
 @NgModule({
   declarations: [
@@ -56,6 +59,7 @@ import {ReactiveFormsModule} from "@angular/forms";
     DashboardGenericUsrComponent,
     ClockComponent,
     SignupComponent,
+    PaymentComponent,
   ],
   imports: [
     BrowserModule,
@@ -74,6 +78,9 @@ import {ReactiveFormsModule} from "@angular/forms";
     MatDialogModule,
     MatChipsModule,
     ReactiveFormsModule,
+    MatCheckboxModule,
+    MatRadioModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

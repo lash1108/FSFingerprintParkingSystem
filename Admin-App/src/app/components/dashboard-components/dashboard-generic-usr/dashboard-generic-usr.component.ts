@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {IdleService} from "../../../services/idle.service";
+import Swal from "sweetalert2";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-dashboard-generic-usr',
@@ -13,12 +15,13 @@ export class DashboardGenericUsrComponent implements OnInit {
   subtotal: number = 0;
   total: number = 0;
 
-  constructor(private idleService: IdleService) {
+  constructor(private idleService: IdleService, private router:Router) {
   }
 
   ngOnInit(): void {
     this.idleService.initialize('fingerprint');
     this.populateData();
+    //this.openAdvice()
   }
 
   populateData(): void {
@@ -51,6 +54,25 @@ export class DashboardGenericUsrComponent implements OnInit {
       localStorage.removeItem('registry');
       localStorage.removeItem('fingerprint');
     }
+  }
+
+  openAdvice(){
+    Swal.fire({
+      icon: 'info',
+      title: 'Usuario Pensionado',
+      html: '¿Desea añadir más de un auto y recibir un precio preferencial? <br> <strong>Regístrese como usuario pensionado.</strong>',
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Sí, registrar',
+      denyButtonText: 'No, gracias',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+      } else if (result.isDenied) {
+        this.router.navigateByUrl('payment').then(() => null)
+      }
+    });
+    return
   }
 }
 

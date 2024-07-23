@@ -27,7 +27,7 @@
         <mat-card>SubTotal: <p class="dataFromJson">{{ subtotal }} MNX</p></mat-card>
         <mat-card>IVA: <p class="dataFromJson">16%</p></mat-card>
         <mat-card>TOTAL: <p class="dataFromJson">{{ total }} MNX</p></mat-card>
-        <button [appGoTo]="'/home'" color="primary" mat-flat-button>Continuar con el pago</button>
+        <button (click)="openAdvice()" color="primary" mat-flat-button>Continuar con el pago</button>
       </mat-card>
     </mat-card-content>
     <mat-card-actions>

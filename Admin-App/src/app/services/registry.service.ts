@@ -18,7 +18,9 @@ export class RegistryService {
     return this.http.post(`${this.baseURL}/setNewRegistryByToken`, data, {headers})
   }
 
-  unsetRegistry(): void {
+  unsetRegistry(data: any): Observable<any> {
+    const headers = this.headers;
+    return this.http.post(`${this.baseURL}/unsetNewRegistryByToken`, data, {headers})
   }
 
   findRegistryByToken(data: any): Observable<any> {

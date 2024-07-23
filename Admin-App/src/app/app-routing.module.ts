@@ -15,11 +15,13 @@ import {
   DashboardGenericUsrComponent
 } from "./components/dashboard-components/dashboard-generic-usr/dashboard-generic-usr.component";
 import {ClockComponent} from "./components/util/clock/clock.component";
+import {PaymentComponent} from "./components/dashboard-components/payment/payment.component";
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
   {path: 'generic', component: DashboardGenericComponent},
   {path: 'consult', component: DashboardGenericUsrComponent},
+  {path: 'payment', component: PaymentComponent},
   {path: 'clock', component: ClockComponent},
   {
     path: 'dashboard',
