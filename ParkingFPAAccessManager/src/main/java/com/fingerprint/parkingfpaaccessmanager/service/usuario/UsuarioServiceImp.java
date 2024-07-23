@@ -118,7 +118,7 @@ public class UsuarioServiceImp implements UsuarioService {
             usr = this.fillUsr(request, type);
         }
 
-        usuarioDao.createOrUpdateUsuario(usr);
+        cveusr = usuarioDao.createOrUpdateUsuario(usr).getCveusr();
         request.put("cveUsr", cveusr);
         responseJson.setDatos(request);
         return responseJson;

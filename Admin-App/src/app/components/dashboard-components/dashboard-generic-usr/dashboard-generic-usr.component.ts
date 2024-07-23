@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {IdleService} from "../../../services/idle.service";
 import Swal from "sweetalert2";
 import {Router} from "@angular/router";
+import {MatDialog} from "@angular/material/dialog";
+import {SignupComponent} from "../../users/signup/signup.component";
 
 @Component({
   selector: 'app-dashboard-generic-usr',
@@ -15,7 +17,9 @@ export class DashboardGenericUsrComponent implements OnInit {
   subtotal: number = 0;
   total: number = 0;
 
-  constructor(private idleService: IdleService, private router:Router) {
+  constructor(private idleService: IdleService,
+              private router:Router,
+              private dialog:MatDialog) {
   }
 
   ngOnInit(): void {
@@ -56,6 +60,20 @@ export class DashboardGenericUsrComponent implements OnInit {
     }
   }
 
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(SignupComponent, {
+      width: '50%',  // Ajusta el ancho del diálogo
+      height: '85%'  // Ajusta la altura del diálogo
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'undefined' || result == undefined){
+        //localStorage.removeItem('iscreating');
+      }
+    });
+  }
+
   openAdvice(){
     Swal.fire({
       icon: 'info',
@@ -68,6 +86,8 @@ export class DashboardGenericUsrComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
+        localStorage.setItem('iscreating',"true");
+        this.openDialog();
       } else if (result.isDenied) {
         this.router.navigateByUrl('payment').then(() => null)
       }

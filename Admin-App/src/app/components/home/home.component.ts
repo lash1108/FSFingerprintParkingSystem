@@ -5,6 +5,7 @@ import {RegistryService} from "../../services/registry.service";
 import {MatDialog} from "@angular/material/dialog";
 import {SignupComponent} from "../users/signup/signup.component";
 import Swal from 'sweetalert2';
+import {UserService} from "../../services/user.service";
 
 
 @Component({
@@ -25,12 +26,14 @@ export class HomeComponent implements OnInit {
   constructor(private webSocketService: WebSocketService,
               private router: Router,
               private registryService: RegistryService,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private userService:UserService) {
   }
 
   ngOnInit(): void {
     this.connect();
     //this.openDialog();
+    //this.validateUsrByToken("3").then(r => console.log(r));
   }
 
   openDialog(): void {
@@ -79,31 +82,29 @@ export class HomeComponent implements OnInit {
 
     const extractedNumber = match[1];
     this.message = "redirecting";
-    this.validateToken(extractedNumber);
+    this.validateToken(extractedNumber).then(() => null);
 
     console.log(this.message);
   }
 
-  validateToken(token: string): void {
+  async validateToken(token: string): Promise<void> {
     this.data = {
       "value1": token
     };
 
     this.registryService.findRegistryByToken(this.data)
       .subscribe({
-        next: (response) => {
+        next: async (response) => {
           if (response.datos.code === 401) {
             console.log(`Error: ${response.datos.msj}`);
             localStorage.setItem('fingerprint', token);
             if (this.creatingUser == 1) {
               this.openDialog();
-              return
             } else {
-              this.router.navigate(['/generic']).then(() => null);
+              await this.router.navigate(['/generic']);
             }
           } else if (response.datos.code === 200) {
             if (this.creatingUser == 1) {
-              // Lanza error de que ya hay un usuario con ese token
               Swal.fire({
                 icon: 'error',
                 title: 'Ooops...',
@@ -113,14 +114,17 @@ export class HomeComponent implements OnInit {
                 this.rotateState(0);
                 this.creatingUser = 0;
               });
-              return
             } else {
               console.log('Registro Encontrado:', response.datos.obj.registro);
-              // Guardar datos en localStorage
-              localStorage.setItem('fingerprint', token);
-              localStorage.setItem('registry', JSON.stringify(response.datos));
-              // Redirigir después de guardar los datos
-              this.router.navigate(['/consult']).then(() => null);
+              const validUser: boolean = await this.validateUsrByToken(token);
+              console.log(validUser)
+              if (validUser) {
+                await this.router.navigate(['/dashboard']);
+              } else {
+                localStorage.setItem('fingerprint', token);
+                localStorage.setItem('registry', JSON.stringify(response.datos));
+                await this.router.navigate(['/consult']);
+              }
             }
           }
         },
@@ -128,6 +132,26 @@ export class HomeComponent implements OnInit {
           console.error('Error en la solicitud:', error);
         }
       });
+  }
+
+
+  async validateUsrByToken(token: string): Promise<boolean> {
+    const data = {
+        name: token
+    };
+    //console.log(` datos ${JSON.stringify(data)}`)
+    try {
+      const response = await this.userService.validUsrByToken(data).toPromise();
+      if (response.datos.codigo === 404) {
+        return false;
+      } else {
+        localStorage.setItem('fingerprint', token);
+        localStorage.setItem('responseUser', JSON.stringify(response));
+        return true;
+      }
+    } catch (error) {
+      return false;
+    }
   }
 
 }

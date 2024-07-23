@@ -27,4 +27,9 @@ export class UserService {
     const headers = this.headers;
     return this.http.post(`${this.baseURL}/createOrUpdateUsr`, data, {headers});
   }
+
+  validUsrByToken(data:any): Observable<any> {
+    const headers = this.headers;
+    return this.http.post(`${this.baseURL}/findUserByToken`, data, {headers});
+  }
 }

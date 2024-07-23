@@ -5,6 +5,8 @@ import { UserService } from "../../../services/user.service";
 import { emailAsyncValidator, usernameAsyncValidator } from "../../util/form/Validators";
 import Swal from "sweetalert2";
 import {MatDialogRef} from "@angular/material/dialog";
+import {EstacionamientoService} from "../../../services/estacionamiento.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-signup',
@@ -13,13 +15,17 @@ import {MatDialogRef} from "@angular/material/dialog";
 })
 export class SignupComponent implements OnInit {
   form: FormGroup;
+  formCarPlate: FormGroup;
   matcher = new MyErrorStateMatcher();
   showPassword: boolean = false;
   validForm: boolean = false;
+  cveusr: any;
 
   constructor(private userService: UserService,
               private fb: FormBuilder,
-              public dialogRef: MatDialogRef<SignupComponent>) {
+              private estService:EstacionamientoService,
+              private router:Router,
+              public dialogRef: MatDialogRef<SignupComponent>,) {
     this.form = this.fb.group({
       email: ['', [
           Validators.required,
@@ -30,7 +36,6 @@ export class SignupComponent implements OnInit {
         ],
         [emailAsyncValidator(this.userService)]
       ],
-
       username: ['', [
         Validators.required,
         Validators.minLength(3),
@@ -50,6 +55,14 @@ export class SignupComponent implements OnInit {
         Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$')
       ]]
     });
+    this.formCarPlate = this.fb.group({
+      carPlate: ['', [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.maxLength(7),
+        Validators.pattern('^[A-Z0-9-]*$')
+      ]]
+    });
   }
 
   ngOnInit(): void {
@@ -58,6 +71,10 @@ export class SignupComponent implements OnInit {
       this.validForm = status === 'VALID';
       console.log(status);
     });
+
+    /*if (localStorage.getItem('iscreating')) {
+      this.showCarPlatePrompt();
+    }*/
   }
 
   togglePasswordVisibility(): void {
@@ -66,6 +83,7 @@ export class SignupComponent implements OnInit {
 
   unsetTokenFromLocalStorage(): void {
     localStorage.removeItem('fingerprint');
+    localStorage.removeItem('iscreating');
   }
 
   saveUser(): void {
@@ -103,8 +121,14 @@ export class SignupComponent implements OnInit {
                 title: "Exito",
                 text: "Usuario Creado correctamente",
               }).then(() => {
-                this.unsetTokenFromLocalStorage();
-                this.dialogRef.close(); // Cierra el diálogo en caso de éxito
+                if (localStorage.getItem('iscreating')){
+                  console.log(response.datos)
+                  this.cveusr = response.datos.cveUsr;
+                  this.showCarPlatePrompt().then(() => this.dialogRef.close());
+                }else{
+                  this.unsetTokenFromLocalStorage();
+                  this.dialogRef.close(); // Cierra el diálogo en caso de éxito
+                }
               });
             }
           },
@@ -116,4 +140,92 @@ export class SignupComponent implements OnInit {
       console.log('Form is invalid');
     }
   }
+
+  async showCarPlatePrompt() {
+    const { value: carPlate } = await Swal.fire({
+      title: "Para continuar, por favor introduzca la placa de su auto",
+      input: "text",
+      inputAttributes: {
+        autocapitalize: "true"
+      },
+      showCancelButton: false,
+      confirmButtonText: "Continuar",
+      showLoaderOnConfirm: true,
+      allowEscapeKey:true,
+      allowOutsideClick: false,
+
+
+      preConfirm: async (carPlate) => {
+        // Validación del valor introducido
+        const carPlateControl = this.formCarPlate.get('carPlate');
+        carPlateControl?.setValue(carPlate);
+        carPlateControl?.markAsTouched();
+        if (!carPlateControl?.valid) {
+          Swal.showValidationMessage('La placa del auto no es válida. Asegúrate de que cumple con los requisitos.');
+          return false; // Evita que el SweetAlert se cierre
+        }
+        return carPlate;
+      },
+    });
+
+    if (carPlate) {
+      try {
+        // Llama al servicio para guardar la placa del auto
+        await this.saveCarPlate(carPlate);
+        Swal.fire({
+          icon: 'success',
+          title: '¡Éxito!',
+          text: 'Placa de auto registrada correctamente',
+        }).then(() => {
+          localStorage.removeItem('iscreating');
+          //this.router.navigateByUrl('home');
+        });
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: `No se pudo registrar la placa`,
+        });
+      }
+    }
+  }
+
+  async saveCarPlate(carPlate: string): Promise<void> {
+    const data = {
+      datos: {
+        cveusr: this.cveusr, // Asumiendo que `this.cveusr` es un número
+        placa: carPlate
+      }
+    };
+
+    this.estService.createOrUpdateEst(data)
+      .subscribe({
+        next: (response) => {
+          if (response.datos.code === 401) {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+            }).then(() => {
+              this.unsetTokenFromLocalStorage();
+              this.dialogRef.close(); // Cierra el diálogo en caso de error
+            });
+          } else {
+            Swal.fire({
+              icon: "success",
+              title: "Exito",
+              text: "Usuario Creado correctamente",
+            }).then(() => {
+              localStorage.removeItem('fingerprint');
+              localStorage.removeItem('registry');
+              this.router.navigateByUrl('home')
+            });
+          }
+        },
+        error: (error) => {
+          console.error('Error en la solicitud:', error);
+        }
+      });
+  }
+
 }
