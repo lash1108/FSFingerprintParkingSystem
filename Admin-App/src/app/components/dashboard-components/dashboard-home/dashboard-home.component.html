@@ -4,24 +4,24 @@
       <mat-card-title>
         <h2>
           <mat-icon #icon>person_pin</mat-icon>
-          Bienvenido de vuelta
+          Bienvenido de vuelta {{loginusr}}
         </h2>
       </mat-card-title>
-      <mat-card-subtitle>usuario</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-      <h3>Autos activos</h3>
-      <button color="primary" mat-flat-button>Pagar</button>
-      <p>...</p>
+      <mat-chip-list class="mat-chip-list-stacked chip-container" aria-label="Color selection">
+        <h2>Autos asignados</h2>
+        <div *ngFor="let id of idcars" class="chip-list-container">
+          <mat-chip selected class="chip-id" color="accent">{{ id }}</mat-chip>
+          <button mat-raised-button class="button-chip-id" color="warn">Pagar</button>
+        </div>
+      </mat-chip-list>
     </mat-card-content>
     <mat-card-actions>
       <mat-divider class="footer-divider"></mat-divider>
       <button [appGoTo]="'/dashboard/active-park'" color="warn" mat-button>Ver mas</button>
-      <button color="accent" mat-button>Añadir nuevo</button>
+      <button color="accent" mat-button (click)="showCarPlatePrompt()">Añadir nuevo</button>
     </mat-card-actions>
-    <mat-card-footer>
-      <small>a</small>
-    </mat-card-footer>
   </mat-card>
   <mat-card class="payment-dash">
     <mat-card-content>

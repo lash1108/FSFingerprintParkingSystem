@@ -32,6 +32,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.connect();
+    localStorage.clear();
     //this.openDialog();
     //this.validateUsrByToken("3").then(r => console.log(r));
   }
@@ -89,50 +90,60 @@ export class HomeComponent implements OnInit {
 
   async validateToken(token: string): Promise<void> {
     this.data = {
-      "value1": token
+      value1: token
     };
 
-    this.registryService.findRegistryByToken(this.data)
-      .subscribe({
-        next: async (response) => {
-          if (response.datos.code === 401) {
-            console.log(`Error: ${response.datos.msj}`);
-            localStorage.setItem('fingerprint', token);
-            if (this.creatingUser == 1) {
-              this.openDialog();
-            } else {
-              await this.router.navigate(['/generic']);
-            }
-          } else if (response.datos.code === 200) {
-            if (this.creatingUser == 1) {
-              Swal.fire({
-                icon: 'error',
-                title: 'Ooops...',
-                text: 'Ya hay un usuario con esa huella'
-              }).then(() => {
-                localStorage.removeItem('fingerprint');
-                this.rotateState(0);
-                this.creatingUser = 0;
-              });
-            } else {
-              console.log('Registro Encontrado:', response.datos.obj.registro);
-              const validUser: boolean = await this.validateUsrByToken(token);
-              console.log(validUser)
-              if (validUser) {
-                await this.router.navigate(['/dashboard']);
-              } else {
-                localStorage.setItem('fingerprint', token);
-                localStorage.setItem('registry', JSON.stringify(response.datos));
-                await this.router.navigate(['/consult']);
-              }
-            }
+    try {
+      const response = await this.registryService.findRegistryByToken(this.data).toPromise();
+
+      console.log('Response received:', response);
+
+      if (response.datos.code === 401) {
+        console.log(`Error: ${response.datos.msj}`);
+        localStorage.setItem('fingerprint', token);
+
+        if (this.creatingUser === 1) {
+          this.openDialog();
+          //this.rotateState(0);
+          return
+        } else if(this.creatingUser === 0) {
+          const validUser: boolean = await this.validateUsrByToken(token);
+          if(validUser){
+            await this.router.navigate(['/dashboard']);
+          }else{
+            await this.router.navigate(['/generic']);
           }
-        },
-        error: (error) => {
-          console.error('Error en la solicitud:', error);
         }
-      });
+      } else if (response.datos.code === 200) {
+        if (this.creatingUser === 1) {
+          await Swal.fire({
+            icon: 'error',
+            title: 'Ooops...',
+            text: 'Ya hay un usuario con esa huella'
+          });
+
+          localStorage.removeItem('fingerprint');
+          this.rotateState(0);
+          this.creatingUser = 0;
+        } else {
+          console.log('Registro Encontrado:', response.datos.obj.registro);
+          const validUser: boolean = await this.validateUsrByToken(token);
+          console.log('Valid user:', validUser);
+
+          if (validUser) {
+            await this.router.navigate(['/dashboard']);
+          } else {
+            localStorage.setItem('fingerprint', token);
+            localStorage.setItem('registry', JSON.stringify(response.datos));
+            await this.router.navigate(['/consult']);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error en la solicitud:', error);
+    }
   }
+
 
 
   async validateUsrByToken(token: string): Promise<boolean> {
