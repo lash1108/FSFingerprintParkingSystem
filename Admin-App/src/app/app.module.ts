@@ -39,6 +39,8 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { PaymentComponent } from './components/dashboard-components/payment/payment.component';
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatRadioModule} from "@angular/material/radio";
+import {MatTableModule} from "@angular/material/table";
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 @NgModule({
   declarations: [
@@ -81,6 +83,8 @@ import {MatRadioModule} from "@angular/material/radio";
     MatCheckboxModule,
     MatRadioModule,
     FormsModule,
+    MatTableModule,
+    MatPaginatorModule
   ],
   providers: [],
   bootstrap: [AppComponent]

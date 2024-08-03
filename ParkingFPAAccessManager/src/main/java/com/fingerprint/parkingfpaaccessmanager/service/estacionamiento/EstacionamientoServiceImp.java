@@ -272,6 +272,8 @@ public class EstacionamientoServiceImp implements EstacionamientoService {
     private Map<String, Object> getStringObjectMap(Object[] resultado, LocalDateTime fechaEntrada) {
         String entryDateStr = utilService.getDateAndHourFormated(fechaEntrada).getValue1();
         String entryTimeStr = utilService.getDateAndHourFormated(fechaEntrada).getValue2();
+        BigDecimal subTotal = utilService.getTotalForDateRange(fechaEntrada, LocalDateTime.now(), 2);
+        BigDecimal total = utilService.getTotalWithIva(subTotal);
 
         // Crear el mapa para la entrada de datos
         Map<String, Object> datosResultado = new LinkedHashMap<>();
@@ -279,6 +281,9 @@ public class EstacionamientoServiceImp implements EstacionamientoService {
         datosResultado.put("entryDate", entryDateStr);
         datosResultado.put("entryTime", entryTimeStr);
         datosResultado.put("entryDateUnformated", fechaEntrada);
+        datosResultado.put("duracion",utilService.getTotalTimeForDateRange(fechaEntrada,LocalDateTime.now()).getName());
+        datosResultado.put("subTotal", subTotal);
+        datosResultado.put("total", total);
         return datosResultado;
     }
 

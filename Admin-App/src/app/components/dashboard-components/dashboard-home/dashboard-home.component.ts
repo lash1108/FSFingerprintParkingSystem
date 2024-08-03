@@ -5,6 +5,8 @@ import {EstacionamientoService} from "../../../services/estacionamiento.service"
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MyErrorStateMatcher} from "../../util/form/MyErrorStateMatcher";
 import {UserService} from "../../../services/user.service";
+import {AutoAsignado} from "../../../model/models";
+import { MatTableDataSource } from '@angular/material/table';
 
 
 @Component({
@@ -24,6 +26,8 @@ export class DashboardHomeComponent implements OnInit, AfterViewInit {
   formCarPlate: FormGroup;
   tokenusr:string|null = "" ;
   matcher = new MyErrorStateMatcher();
+  displayedColumns: string[] = ['idcar', 'actions'];
+  dataSource = new MatTableDataSource<AutoAsignado>();
 
   constructor(private globalService: GlobalService,
               private renderer: Renderer2,
@@ -65,6 +69,8 @@ export class DashboardHomeComponent implements OnInit, AfterViewInit {
       this.emailusr = userData.emailusr;
       this.idcar = userData.idcar;
       this.idcars = this.idcar.slice(0, 4);
+      const transformedData: AutoAsignado[] = this.idcars.map((id: any) => ({ idcar: id }));
+      this.dataSource.data = transformedData;
       this.tokenusr = userData.tokenusr;
       if (this.idcar.length==0){
         this.showCarPlatePrompt().then(() => null);
@@ -162,7 +168,7 @@ export class DashboardHomeComponent implements OnInit, AfterViewInit {
     };
     console.log(` datos ${JSON.stringify(data)}`)
     try {
-      const response = await this.userService.validUsrByToken(data).toPromise();
+      const response = await this.userService.findUserByToken(data).toPromise();
       if (response.datos.codigo === 404) {
         return false;
       } else {

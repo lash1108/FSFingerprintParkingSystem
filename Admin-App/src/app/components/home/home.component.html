@@ -27,10 +27,10 @@
           <div class="login-info" style="display: flex; flex-direction: column; gap: 8px;">
             <mat-card-subtitle>¿Ya eres un usuario pensionado o deseas convertirte en uno?</mat-card-subtitle>
             <div class="buttons" style="display: flex; gap: 10%;">
-              <button (click)="rotateState(1)" color="primary"
+              <button (click)="rotatedState = 1" color="primary"
                       mat-raised-button>Log In
               </button>
-              <button (click)="rotateState(2); creatingUserState(1)" color="accent"
+              <button (click)="openDialog(); creatingUser = 1" color="accent"
                       mat-raised-button>Sign Up
               </button>
             </div>
@@ -73,7 +73,7 @@
                 <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
               </button>
             </mat-form-field>
-            <button (click)="rotateState(0)" color="warn"
+            <button (click)="rotatedState = 0" color="warn"
                     mat-raised-button>
               <mat-icon>arrow_back</mat-icon>
               Back
@@ -113,7 +113,7 @@
           <div class="login-info" style="display: flex; flex-direction: column; gap: 8px;">
             <mat-card-subtitle>Por favor use el lector de huellas para crear su usuario</mat-card-subtitle>
             <div class="buttons" style="display: flex; gap: 10%;">
-              <button (click)="rotateState(0); creatingUserState(0)" color="warn"
+              <button (click)="rotatedState = 0; creatingUser = 0" color="warn"
                       mat-raised-button>
                 <mat-icon>arrow_back</mat-icon>
                 Back

@@ -4,9 +4,8 @@ import {Router} from "@angular/router";
 import {RegistryService} from "../../services/registry.service";
 import {MatDialog} from "@angular/material/dialog";
 import {SignupComponent} from "../users/signup/signup.component";
-import Swal from 'sweetalert2';
 import {UserService} from "../../services/user.service";
-
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -14,12 +13,10 @@ import {UserService} from "../../services/user.service";
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  rotatedState: number = 0;
   hide = true;
-  name: string = "";
   connected: boolean = false;
   message: string = "";
-  data: { value1?: string } = {};
+  rotatedState: number = 0;
   creatingUser: number = 0;
   protected readonly localStorage = localStorage;
 
@@ -33,39 +30,17 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.connect();
     localStorage.clear();
-    //this.openDialog();
-    //this.validateUsrByToken("3").then(r => console.log(r));
+    this.resetState();
   }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(SignupComponent, {
-      width: '50%',  // Ajusta el ancho del diálogo
-      height: '85%'  // Ajusta la altura del diálogo
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'undefined' || result == undefined){
-        localStorage.removeItem('fingerprint');
-      }
-    });
-  }
-
-  rotateState = (state: number) => {
-    /*0 home | 1 login | 2 signing*/
-    this.rotatedState = state;
-  };
-
-  creatingUserState = (state: number) => {
-    this.creatingUser = state;
-    console.log(this.creatingUser)
-  }
-
-  connect() {
+  /*Conexion de webSockets*/
+  private connect() {
+    /*Primero tratamos de conectar*/
     this.webSocketService.connect((message) => this.handleMessage(message));
     this.connected = true;
   }
 
-  handleMessage(message: any) {
+  private handleMessage(message: any) {
     if (!message || !message.content) {
       this.message = 'Received empty or invalid message';
       console.log(this.message);
@@ -81,88 +56,70 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    const extractedNumber = match[1];
-    this.message = "redirecting";
-    this.validateToken(extractedNumber).then(() => null);
-
-    console.log(this.message);
+    const token:string = match[1];
+    /*Si se conecta validamos el registro con el token*/
+    this.existUsrOrRegistryByToken(token).then(() => null);
+    return;
   }
 
-  async validateToken(token: string): Promise<void> {
-    this.data = {
-      value1: token
-    };
+  private async existUsrOrRegistryByToken(token: any) {
+    localStorage.setItem('fingerprint', token);
+    const validUser: boolean = await this.userService.validateUsrByToken(token);
 
-    try {
-      const response = await this.registryService.findRegistryByToken(this.data).toPromise();
-
-      console.log('Response received:', response);
-
-      if (response.datos.code === 401) {
-        console.log(`Error: ${response.datos.msj}`);
-        localStorage.setItem('fingerprint', token);
-
-        if (this.creatingUser === 1) {
-          this.openDialog();
-          //this.rotateState(0);
-          return
-        } else if(this.creatingUser === 0) {
-          const validUser: boolean = await this.validateUsrByToken(token);
-          if(validUser){
-            await this.router.navigate(['/dashboard']);
-          }else{
-            await this.router.navigate(['/generic']);
-          }
-        }
-      } else if (response.datos.code === 200) {
-        if (this.creatingUser === 1) {
-          await Swal.fire({
-            icon: 'error',
-            title: 'Ooops...',
-            text: 'Ya hay un usuario con esa huella'
-          });
-
-          localStorage.removeItem('fingerprint');
-          this.rotateState(0);
-          this.creatingUser = 0;
-        } else {
-          console.log('Registro Encontrado:', response.datos.obj.registro);
-          const validUser: boolean = await this.validateUsrByToken(token);
-          console.log('Valid user:', validUser);
-
-          if (validUser) {
-            await this.router.navigate(['/dashboard']);
-          } else {
-            localStorage.setItem('fingerprint', token);
-            localStorage.setItem('registry', JSON.stringify(response.datos));
-            await this.router.navigate(['/consult']);
-          }
+    if (this.creatingUser != 1){
+      if (validUser) { // Si existe un usuario con ese token
+        console.log("Hay un usuario");
+        await this.router.navigate(['/dashboard']);
+      } else { // No existe un usuario con ese token
+        console.log("No hay usuario");
+        const validRegistry: boolean = await this.validateRegistryByToken(token);
+        if (validRegistry) { // Si ya tiene un registro - Solo consulta
+          await this.router.navigate(['/consult']);
+        } else { // No tiene registro - Lo crea
+          await this.router.navigate(['/generic']);
         }
       }
-    } catch (error) {
-      console.error('Error en la solicitud:', error);
     }
   }
 
-
-
-  async validateUsrByToken(token: string): Promise<boolean> {
-    const data = {
-        name: token
-    };
-    //console.log(` datos ${JSON.stringify(data)}`)
+  private async validateRegistryByToken(token:string):Promise<boolean>{
+    const data: { value1?: string } = { value1: token };
+    const response = await firstValueFrom(this.registryService.findRegistryByToken(data));
     try {
-      const response = await this.userService.validUsrByToken(data).toPromise();
-      if (response.datos.codigo === 404) {
-        return false;
-      } else {
-        localStorage.setItem('fingerprint', token);
-        localStorage.setItem('responseUser', JSON.stringify(response));
+      if (response.datos.code === 200) {
         return true;
+      } else if(response.datos.code === 401){
+        localStorage.setItem('registry', JSON.stringify(response.datos));
+        return false;
+      }else{
+        throw new Error('Unexpected response code');
       }
-    } catch (error) {
+    }catch (error) {
+      console.log(error)
       return false;
     }
+  }
+
+  async openDialog(): Promise<any> {
+    return new Promise((resolve) => {
+      const dialogRef = this.dialog.open(SignupComponent, {
+        width: '50%',  // Ajusta el ancho del diálogo
+        height: '85%'  // Ajusta la altura del diálogo
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 'undefined' || result === undefined) {
+          localStorage.removeItem('fingerprint');
+        }
+        this.resetState();
+        resolve(result);
+      });
+    });
+  }
+
+  private resetState() {
+    this.rotatedState = 0;
+    this.creatingUser = 0;
   }
 
 }

@@ -16,4 +16,10 @@ export class EstacionamientoService {
     const headers = this.headers;
     return this.http.post(`${this.baseURL}/CreateOrUpdateEst`, data, {headers});
   }
+
+  findEstacionamientos(data:any):Observable<any> {
+    const headers = this.headers;
+    return this.http.post(`${this.baseURL}/findEstacionamientos`, data, {headers});
+  }
+
 }

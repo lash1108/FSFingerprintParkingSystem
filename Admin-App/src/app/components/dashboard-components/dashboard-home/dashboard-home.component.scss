@@ -3,26 +3,6 @@
   gap: 1rem;
   align-items: center;
 
-  .chip-container{
-    display: flex;
-    flex-direction: column;
-    margin: 5% 5% 5% 5%;
-    width: 80%;
-    .chip-list-container{
-      width: 100%;
-      display: flex;
-      margin-bottom: 1%;
-
-      .chip-id{
-        width: 100%;
-      }
-
-      .button-chip-id{
-        width: 20%;
-        margin-left: 5%;
-      }
-    }
-  }
 
   .welcome-dash, .payment-dash {
     height: 75vh;
@@ -58,6 +38,14 @@
       justify-content: space-between;
       padding: 0.5rem;
     }
+
+    .autos-activos{
+      td{
+        width: 100%;
+        padding: 10px;
+      }
+    }
+
   }
 
   .payment-dash {

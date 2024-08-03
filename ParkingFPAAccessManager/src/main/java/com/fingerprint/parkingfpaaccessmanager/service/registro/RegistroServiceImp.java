@@ -77,6 +77,8 @@ public class RegistroServiceImp implements RegistroService {
         return response.okResponse("Registro creado exitosamente", responseMap);
     }
 
+
+
     @Override
     public ResponseJsonGeneric findRegistryByToken(ConsumeJsonStringString consume) {
         ResponseJsonHandler response = new ResponseJsonHandler();

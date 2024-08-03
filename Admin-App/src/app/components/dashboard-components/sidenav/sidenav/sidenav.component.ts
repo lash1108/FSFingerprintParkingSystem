@@ -2,7 +2,6 @@ import {animate, keyframes, style, transition, trigger,} from '@angular/animatio
 import {Component, EventEmitter, HostListener, OnInit, Output,} from '@angular/core';
 
 import {navBarData} from "./nav-data";
-import {GlobalService} from "../../../../services/global.service";
 
 interface SideNavToggle {
   screenWidth: number;
@@ -44,7 +43,7 @@ export class SidenavComponent implements OnInit {
   screenWidth = 0;
   navData = navBarData;
 
-  constructor(private globalService: GlobalService) {
+  constructor() {
   }
 
   @HostListener('window:resize', ['$event']) onResize(event: any) {
@@ -70,21 +69,20 @@ export class SidenavComponent implements OnInit {
     });
   }
 
-  closeSidenav(): void {
-    this.collapsed = false;
-    this.onToggleSideNav.emit({
-      collapsed: this.collapsed,
-      screenWidth: this.screenWidth,
-    });
-  }
-
   getFilteredNavData() {
-    if (this.globalService.getTypeUser() === 1) {
-      return this.navData.filter(value => value.section === 'main')
+    // Obtén el valor de 'typeusr' y conviértelo a número, o usa un valor por defecto (por ejemplo, -1)
+    const typeusr = Number(localStorage.getItem('typeusr')) || -1;
+
+    if (typeusr === 0) {
+      return this.navData.filter(value => value.section === 'main');
+    } else if (typeusr === 1) {
+      return this.navData.filter(value => value.section === 'main' && value.type === 'usr');
     } else {
-      return this.navData.filter(value => value.section === 'main' && value.type === 'usr')
+      // Opcional: Maneja el caso cuando 'typeusr' no es 0 ni 1
+      return this.navData.filter(value => value.section === 'main');
     }
   }
+
 
 
 }

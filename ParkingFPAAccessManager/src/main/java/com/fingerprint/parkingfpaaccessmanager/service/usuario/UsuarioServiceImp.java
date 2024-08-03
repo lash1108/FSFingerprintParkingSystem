@@ -79,6 +79,7 @@ public class UsuarioServiceImp implements UsuarioService {
                 } else if (usuarioDao.existsTblusrByTokenusr(param)) {
                     usr = usuarioDao.findTblusrByTokenusr(param);
                     if (usr != null) {
+                        response.put("code", HttpStatus.OK.value());
                         response.put(String.valueOf(usr.getCveusr()), this.fillUsr(usr));
                     } else {
                         response = this.badCredentialsResponse();

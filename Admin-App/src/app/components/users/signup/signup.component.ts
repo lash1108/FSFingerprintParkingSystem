@@ -66,15 +66,49 @@ export class SignupComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Suscribirse a los cambios de estado del formulario
-    this.form.statusChanges.subscribe(status => {
-      this.validForm = status === 'VALID';
-      console.log(status);
+    this.showDialogFingerPrint().then(() => null);
+  }
+
+  async showDialogFingerPrint(): Promise<void> {
+    await Swal.fire({
+      title: 'No se ha registrado una huella',
+      text: 'Por favor, use el lector y espere hasta que se registre una huella.',
+      icon: 'warning',
+      showCancelButton: false,
+      showConfirmButton: false,
+      allowOutsideClick: false, // No permite cerrar la alerta haciendo clic fuera de ella
+      allowEscapeKey: false, // No permite cerrar la alerta con la tecla Escape
+      didOpen: () => {
+        // Aquí puedes configurar tu lector de huellas y realizar una verificación continua
+        const interval = setInterval(async () => {
+          const fingerprint = localStorage.getItem('fingerprint');
+          if (fingerprint) {
+            const validUser = await this.userService.validateUsrByToken(fingerprint);
+            if (validUser){
+              await this.showUsrError(fingerprint);
+            }else{
+              clearInterval(interval); // Detener la verificación continua
+              Swal.close(); // Cerrar el diálogo
+            }
+          }
+        }, 1000); // Verificar cada segundo
+      }
+    });
+  }
+
+  async showUsrError(token: string): Promise<void> {
+    await Swal.fire({
+      title: 'Error',
+      text: 'Se ha encontrado un usuario con este token. El almacenamiento de huellas será reiniciado.',
+      icon: 'error',
+      confirmButtonText: 'Aceptar'
     });
 
-    /*if (localStorage.getItem('iscreating')) {
-      this.showCarPlatePrompt();
-    }*/
+      // Borra el fingerprint del localStorage
+      localStorage.removeItem('fingerprint');
+
+      // Vuelve a mostrar el diálogo de huella
+      await this.showDialogFingerPrint();
   }
 
   togglePasswordVisibility(): void {
