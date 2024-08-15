@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import {Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {SignupComponent} from "../../users/signup/signup.component";
+import {RegistryService} from "../../../services/registry.service";
 
 @Component({
   selector: 'app-dashboard-generic-usr',
@@ -19,14 +20,38 @@ export class DashboardGenericUsrComponent implements OnInit {
 
   constructor(private idleService: IdleService,
               private router:Router,
-              private dialog:MatDialog) {
+              private dialog:MatDialog,
+              private registryService:RegistryService) {
   }
 
   ngOnInit(): void {
     this.idleService.initialize('fingerprint');
-    this.populateData();
+    this.findRegistryByToken(localStorage.getItem('fingerprint'))
     //this.openAdvice()
   }
+
+  findRegistryByToken(token: string | null): void {
+    if (!token) {
+      console.error('Token no válido');
+      return;
+    }
+
+    const data = { value1: token }; // Define el objeto con la propiedad value1
+    this.registryService.findRegistryByToken(data)
+      .subscribe({
+        next: (response) => {
+          if (response.datos.code === 200) {
+            console.log('Registro exitoso:', response);
+            localStorage.setItem('registry', JSON.stringify(response.datos));
+            this.populateData();
+          }
+        },
+        error: (error) => {
+          console.error('Error al registrar:', error);
+        }
+      });
+  }
+
 
   populateData(): void {
     const registryString = localStorage.getItem('registry');

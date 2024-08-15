@@ -23,7 +23,7 @@ services:
       - '3306'
 
   admin-backend:
-    image: admin-parking
+    image: alextcw/admin-parking:v1.0  # Aquí se cambia la imagen
     restart: always
     networks:
       parkingnetwork:
@@ -34,3 +34,4 @@ services:
       - '8080'
     depends_on:
       - estacionamiento-db
+
