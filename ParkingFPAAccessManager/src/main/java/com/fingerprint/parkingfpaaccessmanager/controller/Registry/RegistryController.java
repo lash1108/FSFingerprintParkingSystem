@@ -1,11 +1,10 @@
 package com.fingerprint.parkingfpaaccessmanager.controller.Registry;
 
-import com.fingerprint.parkingfpaaccessmanager.model.pojos.consume.ConsumeJsonString;
-import com.fingerprint.parkingfpaaccessmanager.model.pojos.consume.ConsumeJsonStringString;
+import com.fingerprint.parkingfpaaccessmanager.model.pojos.consume.ConsumeJsonGeneric;
 import com.fingerprint.parkingfpaaccessmanager.model.pojos.response.ResponseJsonGeneric;
-import com.fingerprint.parkingfpaaccessmanager.model.pojos.response.ResponseJsonStringString;
+import com.fingerprint.parkingfpaaccessmanager.model.pojos.util.ResponseJsonHandler;
 import com.fingerprint.parkingfpaaccessmanager.service.registro.RegistroService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,27 +14,37 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping({"/registry"})
 public class RegistryController {
 
-    @Autowired
+    final
     RegistroService registroService;
 
-    @GetMapping(value = {"/findLastRegistryRecord"}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseJsonStringString> findLastRegistryRecord() {
-        return ResponseEntity.ok(registroService.findLastRegistryRecord());
+    public RegistryController(RegistroService registroService) {
+        this.registroService = registroService;
     }
 
-    @PostMapping(value = {"/setNewRegistryByToken"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseJsonGeneric> setNewRegistryByToken(@RequestBody ConsumeJsonString consume) {
-        return ResponseEntity.ok(registroService.setNewRegistryByToken(consume));
+    @PostMapping(value = {"/createOrUpdateRegistry"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseJsonGeneric> setNewRegistryByToken(@RequestBody ConsumeJsonGeneric consume) {
+        ResponseJsonGeneric response;
+        try {
+            response = registroService.createOrUpdateRegistryByToken(consume);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            ResponseJsonHandler errorResponse = new ResponseJsonHandler();
+            response = errorResponse.serverErrorResponse("An error occurred: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     @PostMapping(value = {"/findRegistryByToken"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseJsonGeneric> findRegistryByToken(@RequestBody ConsumeJsonStringString consume) {
-        return ResponseEntity.ok(registroService.findRegistryByToken(consume));
-    }
-
-    @PostMapping(value = {"/unsetNewRegistryByToken"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseJsonGeneric> unsetNewRegistryByToken(@RequestBody ConsumeJsonString consume) {
-        return ResponseEntity.ok(registroService.unsetRegistryByToken(consume));
+    public ResponseEntity<ResponseJsonGeneric> findRegistryByToken(@RequestBody ConsumeJsonGeneric consume) {
+        ResponseJsonGeneric response;
+        try {
+            response = registroService.findRegistryByToken(consume);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            ResponseJsonHandler errorResponse = new ResponseJsonHandler();
+            response = errorResponse.serverErrorResponse("An error occurred: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     @GetMapping(value = {"/findAllRegistries"}, produces = MediaType.APPLICATION_JSON_VALUE)

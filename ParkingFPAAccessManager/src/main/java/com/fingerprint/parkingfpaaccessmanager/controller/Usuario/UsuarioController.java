@@ -7,13 +7,12 @@ import com.fingerprint.parkingfpaaccessmanager.model.pojos.consume.ConsumeJsonSt
 import com.fingerprint.parkingfpaaccessmanager.model.pojos.response.ResponseJsonBoolean;
 import com.fingerprint.parkingfpaaccessmanager.model.pojos.response.ResponseJsonGeneric;
 import com.fingerprint.parkingfpaaccessmanager.model.pojos.response.ResponseJsonLongString;
+import com.fingerprint.parkingfpaaccessmanager.model.pojos.util.ResponseJsonHandler;
 import com.fingerprint.parkingfpaaccessmanager.service.usuario.UsuarioService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import static java.util.Objects.nonNull;
 
 
 @CrossOrigin(origins = {"*"})
@@ -29,26 +28,55 @@ public class UsuarioController {
 
     @PostMapping(value = {"/createOrUpdateUsr"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseJsonGeneric> createOrUpdateUsr(@RequestBody ConsumeJsonGeneric consume) {
-        ResponseJsonGeneric response = usuarioService.createOrUpdateUser(consume);
-        if (nonNull(response)) {
+        ResponseJsonGeneric response;
+        try {
+            response = usuarioService.createOrUpdateUser(consume);
             return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            ResponseJsonHandler errorResponse = new ResponseJsonHandler();
+            response = errorResponse.serverErrorResponse("An error occurred: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
-        return null;
     }
+
 
     @PostMapping(value = {"/deleteUsrByCveUsr"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseJsonGeneric> deleteUsrByCveUsr(@RequestBody ConsumeJsonLong consume) {
-        return ResponseEntity.ok(usuarioService.deleteUsrByCveusr(consume));
+        ResponseJsonGeneric response;
+        try {
+            response = usuarioService.deleteUsrByCveusr(consume);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            ResponseJsonHandler errorResponse = new ResponseJsonHandler();
+            response = errorResponse.serverErrorResponse("An error occurred: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     @PostMapping(value = {"/findAllUsers"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseJsonGeneric> findAllUsers(@RequestBody ConsumeJsonString consume) {
-        return ResponseEntity.ok(usuarioService.findAllUsersByTypeusr(consume.getName()));
+        ResponseJsonGeneric response;
+        try {
+            response = usuarioService.findAllUsersByTypeusr(consume.getName());
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            ResponseJsonHandler errorResponse = new ResponseJsonHandler();
+            response = errorResponse.serverErrorResponse("An error occurred: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     @PostMapping(value = {"/findUserByCveusr"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseJsonGeneric> findUserByCveusr(@RequestBody ConsumeJsonLong consume) {
-        return ResponseEntity.ok(usuarioService.findUserByCveusr(consume));
+        ResponseJsonGeneric response;
+        try {
+            response = usuarioService.findUserByCveusr(consume);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            ResponseJsonHandler errorResponse = new ResponseJsonHandler();
+            response = errorResponse.serverErrorResponse("An error occurred: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     @PostMapping(value = {"/validEmail"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -83,20 +111,41 @@ public class UsuarioController {
 
     @PostMapping(value = {"/findUsrByEmailAndPassword"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseJsonGeneric> findUsrByParamAndPassword(@RequestBody ConsumeJsonStringString consume) {
-        return ResponseEntity.ok(usuarioService.findUsrByParamAndPassword(
-                consume.getValue1(), consume.getValue2(), 1));
+        ResponseJsonGeneric response;
+        try {
+            response = usuarioService.findUsrByParamAndPassword(consume.getValue1(), consume.getValue2(), 1);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            ResponseJsonHandler errorResponse = new ResponseJsonHandler();
+            response = errorResponse.serverErrorResponse("An error occurred: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     @PostMapping(value = {"/findUserByLoginAndPassword"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseJsonGeneric> findUserByLoginAndPassword(@RequestBody ConsumeJsonStringString consume) {
-        return ResponseEntity.ok(usuarioService.findUsrByParamAndPassword(
-                consume.getValue1(), consume.getValue2(), 2));
+        ResponseJsonGeneric response;
+        try {
+            response = usuarioService.findUsrByParamAndPassword(consume.getValue1(), consume.getValue2(), 2);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            ResponseJsonHandler errorResponse = new ResponseJsonHandler();
+            response = errorResponse.serverErrorResponse("An error occurred: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     @PostMapping(value = {"/findUserByToken"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseJsonGeneric> findUserByToken(@RequestBody ConsumeJsonString consume) {
-        return ResponseEntity.ok(usuarioService.findUsrByParamAndPassword(
-                consume.getName(), null, 3));
+        ResponseJsonGeneric response;
+        try {
+            response = usuarioService.findUsrByParamAndPassword(consume.getName(), null, 3);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            ResponseJsonHandler errorResponse = new ResponseJsonHandler();
+            response = errorResponse.serverErrorResponse("An error occurred: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
 }
