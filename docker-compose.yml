@@ -23,7 +23,7 @@ services:
       - '3306'
 
   admin-backend:
-    image: alextcw/admin-parking:v1.0  # Aquí se cambia la imagen
+    image: alextcw/admin-parking:v1.0
     restart: always
     networks:
       parkingnetwork:
@@ -35,3 +35,5 @@ services:
     depends_on:
       - estacionamiento-db
 
+volumes:
+  db-data:  # Define el volumen
