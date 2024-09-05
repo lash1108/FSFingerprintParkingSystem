@@ -3,7 +3,7 @@
     height: 0;
   }
   50% {
-    height: 100%;
+    height: 85%;
   }
 }
 
@@ -77,14 +77,14 @@
   .scan {
     margin-top: 8%;
     margin-left: 10%;
-    width: 320px;
-    height: 380px;
+    width: 400px;
+    height: 460px;
 
     .fingerprint {
       position: relative;
       width: 100%;
       height: 100%;
-      background: url('/assets/img/fingerprint.png');
+      //background: url('/assets/img/codeqr.png');
       background-size: cover;
     }
 
@@ -95,9 +95,10 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: url('/assets/img/fingerprint-back.png');
+      background: url('/assets/img/qrcodered.png');
       background-size: cover;
       animation: animate 4s ease-in-out infinite;
+      filter: sepia(100%) hue-rotate(180deg) saturate(500%);
     }
 
     .fingerprint::after {

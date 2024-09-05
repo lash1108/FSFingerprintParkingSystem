@@ -7,7 +7,8 @@ import {Observable} from "rxjs";
   providedIn: 'root'
 })
 export class EstacionamientoService {
-  baseURL = `${environment.backendURL}/est`;
+  //baseURL = `${environment.backendURL}/est`;
+  baseURL = `http://parking-uaem.ddns.net:8080/est`;
   headers = new HttpHeaders({'Content-Type': 'application/json'});
 
   constructor(private http: HttpClient) { }

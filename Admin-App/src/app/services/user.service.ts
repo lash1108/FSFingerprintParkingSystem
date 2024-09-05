@@ -7,7 +7,9 @@ import {firstValueFrom, Observable} from "rxjs";
   providedIn: 'root'
 })
 export class UserService {
-  baseURL = `${environment.backendURL}/usr`;
+  //baseURL = `${environment.backendURL}/usr`;
+  baseURL = `http://parking-uaem.ddns.net:8080/usr`;
+
   headers = new HttpHeaders({'Content-Type': 'application/json'});
 
   constructor(private http: HttpClient) {
