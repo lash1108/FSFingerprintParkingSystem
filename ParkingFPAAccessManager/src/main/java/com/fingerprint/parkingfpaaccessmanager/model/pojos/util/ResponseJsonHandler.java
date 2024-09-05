@@ -60,4 +60,15 @@ public class ResponseJsonHandler {
         return responseJson;
     }
 
+    public ResponseJsonGeneric badRequestResponse(String msj, Object obj) {
+        ResponseJsonGeneric responseJson = new ResponseJsonGeneric();
+        Map<String, Object> okMap = new HashMap<>();
+        okMap.put("msj", msj);
+        okMap.put("value", HttpStatus.BAD_REQUEST.getReasonPhrase());
+        okMap.put("obj", obj);
+        okMap.put("code", HttpStatus.BAD_REQUEST.value());
+        responseJson.setDatos(okMap);
+        return responseJson;
+    }
+
 }

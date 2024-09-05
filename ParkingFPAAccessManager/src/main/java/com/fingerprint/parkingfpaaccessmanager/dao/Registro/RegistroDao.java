@@ -8,13 +8,10 @@ public interface RegistroDao {
 
     Tblregistry createOrUpdateRegistry(Tblregistry tblregistry);
 
-    List<Object[]> findLastEdoRegistryRecord();
-
-    Tblregistry findByTokenusr(String token);
-
-    boolean existsTblregistryByTokenusr(String token);
+    Tblregistry findRegistryByCvereg(long cvereg);
 
     void deleteTblRegistryByCveregistry(long cvereg);
 
     List<Tblregistry> findAllTblregistry();
+
 }

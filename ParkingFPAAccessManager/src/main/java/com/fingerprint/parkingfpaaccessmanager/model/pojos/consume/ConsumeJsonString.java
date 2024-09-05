@@ -10,6 +10,5 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ConsumeJsonString {
-
     private String name;
 }

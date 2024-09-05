@@ -5,15 +5,14 @@ import com.fingerprint.parkingfpaaccessmanager.dao.estacionamiento.Estacionamien
 import com.fingerprint.parkingfpaaccessmanager.dao.usuario.UsuarioDao;
 import com.fingerprint.parkingfpaaccessmanager.model.entity.Tblest;
 import com.fingerprint.parkingfpaaccessmanager.model.entity.Tblregistry;
-import com.fingerprint.parkingfpaaccessmanager.model.pojos.consume.ConsumeJsonString;
-import com.fingerprint.parkingfpaaccessmanager.model.pojos.consume.ConsumeJsonStringString;
+import com.fingerprint.parkingfpaaccessmanager.model.pojos.consume.ConsumeJsonGeneric;
 import com.fingerprint.parkingfpaaccessmanager.model.pojos.response.ResponseJsonGeneric;
-import com.fingerprint.parkingfpaaccessmanager.model.pojos.response.ResponseJsonStringString;
 import com.fingerprint.parkingfpaaccessmanager.model.pojos.util.ResponseJsonHandler;
 import com.fingerprint.parkingfpaaccessmanager.service.util.UtilService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -42,112 +41,94 @@ public class RegistroServiceImp implements RegistroService {
     }
 
     @Override
-    public ResponseJsonStringString findLastRegistryRecord() {
-        ResponseJsonStringString responseJson = new ResponseJsonStringString();
-        List<Object[]> datos = registroDao.findLastEdoRegistryRecord();
-        for (Object[] data : datos) {
-            responseJson.setValue1(String.valueOf(data[0]));
-            responseJson.setValue2(String.valueOf(data[1]));
+    public ResponseJsonGeneric createOrUpdateRegistryByToken(ConsumeJsonGeneric consume) {
+        ResponseJsonHandler response = new ResponseJsonHandler();
+
+        // Validar si consume o consume.getDatos() es nulo
+        if (consume == null || consume.getDatos() == null) {
+            return response.badRequestResponse("JSON null or malformed", null);
         }
-        return responseJson;
+
+        Map<String, Object> datos = consume.getDatos();
+
+        // Validar si el token fue proporcionado
+        String token = (String) datos.get("token");
+        if (token == null || token.isEmpty()) {
+            return response.badRequestResponse("No token was provided", null);
+        }
+
+        // Verificar si existe un usuario con el token proporcionado
+        if (!usuarioDao.existsTblusrByTokenusr(token)) {
+            return response.notFoundResponse("User not found with token " + token);
+        }
+
+        // Procesar la actualización si cvereg está presente
+        if (datos.containsKey("cvereg")) {
+            return updateRegistry(datos, response);
+        }
+
+        // Verificar si ya existe un registro activo para el token
+        if (estacionamientoDao.existActiveEstWithToken(token)) {
+            return response.badRequestResponse("The token already has an active record", null);
+        }
+
+        // Crear nuevo registro
+        return createNewRegistry(token, response);
     }
 
-    @Override
-    public ResponseJsonGeneric setNewRegistryByToken(ConsumeJsonString consume) {
-        ResponseJsonHandler response = new ResponseJsonHandler();
-        Map<String, Object> responseMap = new LinkedHashMap<>();
-        String token = consume.getName();
-        if (token == null) {
-            return response.badCredencialsError("No se proporcoono un token");
-        }
+    private ResponseJsonGeneric updateRegistry(Map<String, Object> datos, ResponseJsonHandler response) {
+        Integer cvereg = (Integer) datos.get("cvereg");
+        Tblregistry tblregistry = registroDao.findRegistryByCvereg(cvereg);
+        Tblest tblest = estacionamientoDao.findTblestByCveest(tblregistry.getTblest().getCveest());
 
-        if (registroDao.existsTblregistryByTokenusr(token)) {
-            return response.badCredencialsError("ya existe un usuario con ese token");
-        }
+        // Actualizar los datos de salida y tiempo de uso
+        tblest.setExitdate(LocalDateTime.now());
+        Duration duration = Duration.between(tblest.getEntrydate(), LocalDateTime.now());
+        tblest.setTotal(BigDecimal.valueOf(duration.toHours()));
 
+        // Guardar y devolver la respuesta
+        tblregistry.setTblest(estacionamientoDao.saveOrUpdateTblest(tblest));
+        return response.okResponse("Registry updated", registroDao.createOrUpdateRegistry(tblregistry));
+    }
+
+    private ResponseJsonGeneric createNewRegistry(String token, ResponseJsonHandler response) {
+        // Crear un nuevo registro de estacionamiento
+        Tblest tblest = new Tblest();
+        tblest.setEntrydate(LocalDateTime.now());
+
+        // Crear un nuevo registro y asociarlo con el usuario
         Tblregistry tblregistry = new Tblregistry();
-        tblregistry.setEdoregistry("0");
-        tblregistry.setEntryDate(LocalDateTime.now());
-        tblregistry.setTokenusr(token);
+        tblregistry.setTblusr(usuarioDao.findTblusrByTokenusr(token));
+        tblregistry.setTblest(estacionamientoDao.saveOrUpdateTblest(tblest));
 
-        registroDao.createOrUpdateRegistry(tblregistry);
-        responseMap.put("registro", tblregistry);
-        responseMap.put("fecha", utilService.getDateAndHourFormated(tblregistry.getEntryDate()));
-
-        return response.okResponse("Registro creado exitosamente", responseMap);
-    }
-
-
-
-    @Override
-    public ResponseJsonGeneric findRegistryByToken(ConsumeJsonStringString consume) {
-        ResponseJsonHandler response = new ResponseJsonHandler();
-        Map<String, Object> responseMap = new LinkedHashMap<>();
-        String token = consume.getValue1();
-        String edo = consume.getValue2();
-        if (edo == null || edo.isEmpty()) {
-            edo = "1";
-        }
-        if (token == null) {
-            return response.badCredencialsError("No se proporcionó un token");
-        }
-        if (!registroDao.existsTblregistryByTokenusr(token)) {
-            return response.badCredencialsError("No existe el registro con token: " + token);
-        }
-
-        Tblregistry tblregistry = registroDao.findByTokenusr(token);
-        if (tblregistry == null) {
-            return response.notFoundResponse("No se pudo localizar el registro con token: " + token);
-        }
-        tblregistry.setEdoregistry(edo);
-        registroDao.createOrUpdateRegistry(tblregistry);
-        BigDecimal subTotal = utilService.getTotalForDateRange(tblregistry.getEntryDate(), LocalDateTime.now(), 1);
-        BigDecimal total = utilService.getTotalWithIva(subTotal);
-
-        responseMap.put("registro", tblregistry);
-        responseMap.put("fecha", utilService.getDateAndHourFormated(tblregistry.getEntryDate()));
-        responseMap.put("duracion", utilService.getTotalTimeForDateRange(tblregistry.getEntryDate(),LocalDateTime.now()));
-        responseMap.put("subTotal", subTotal);
-        responseMap.put("total", total);
-
-        return response.okResponse("Registro Encontrado", responseMap);
+        // Guardar y devolver la respuesta
+        return response.okResponse("Registry created", registroDao.createOrUpdateRegistry(tblregistry));
     }
 
     @Override
-    public ResponseJsonGeneric unsetRegistryByToken(ConsumeJsonString consume) {
+    public ResponseJsonGeneric findRegistryByToken(ConsumeJsonGeneric consume) {
         ResponseJsonHandler response = new ResponseJsonHandler();
-        Map<String, Object> responseMap = new LinkedHashMap<>();
-        String token = consume.getName();
-        if (token == null) {
-            return response.badCredencialsError("No se proporcionó un token");
+        if (consume != null) {
+            if (consume.getDatos() != null) {
+
+                Map<String, Object> data = consume.getDatos();
+                Tblest est;
+
+                List<Tblest> estList = estacionamientoDao.findActiveEstWithToken(data.get("token").toString());
+                if (estList != null && !estList.isEmpty()) {
+                    est = estList.get(0);
+                } else {
+                    return response.notFoundResponse("registries not found for " + data.get("token").toString());
+                }
+
+                Map<String, Object> responseMap = new LinkedHashMap<>();
+                responseMap.put("entryDate", utilService.getDateAndHourFormated(est.getEntrydate()));
+                return response.okResponse("Registro encontrado", responseMap);
+            }
         }
-        if (!registroDao.existsTblregistryByTokenusr(token)) {
-            return response.badCredencialsError("No existe el registro con token: " + token);
-        }
-        Tblregistry tblregistry = registroDao.findByTokenusr(token);
-        if (tblregistry == null) {
-            return response.notFoundResponse("No se pudo localizar el registro con token: " + token);
-        }
-
-        Tblest est = new Tblest();
-        LocalDateTime entryDate = tblregistry.getEntryDate();
-        LocalDateTime exitDate = LocalDateTime.now();
-        est.setEntrydate(entryDate);
-        est.setExitdate(exitDate);
-        BigDecimal subTotal = utilService.getTotalForDateRange(entryDate, exitDate, 1);
-        est.setTotal(utilService.getTotalWithIva(subTotal));
-
-        estacionamientoDao.saveOrUpdateTblest(est);
-
-        registroDao.deleteTblRegistryByCveregistry(tblregistry.getCvereg());
-        responseMap.put("registro", est);
-        responseMap.put("fechaEntrada", utilService.getDateAndHourFormated(est.getEntrydate()).getValue1());
-        responseMap.put("horaEntrada", utilService.getDateAndHourFormated(est.getEntrydate()).getValue2());
-        responseMap.put("fechaSalida", utilService.getDateAndHourFormated(est.getExitdate()).getValue1());
-        responseMap.put("horaSalida", utilService.getDateAndHourFormated(est.getExitdate()).getValue2());
-
-        return response.okResponse("Registro migrado exitosamente", responseMap);
+        return response.badRequestResponse("json null or malformed", response);
     }
+
 
     @Override
     public ResponseJsonGeneric findAllRegistries() {

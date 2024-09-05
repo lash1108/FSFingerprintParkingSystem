@@ -8,18 +8,15 @@ import java.util.List;
 
 public interface EstacionamientoDao {
 
+    List<Tblest> findActiveEstWithToken(String token);
+
+    boolean existActiveEstWithToken(String token);
+
     Tblest saveOrUpdateTblest(Tblest tblest);
-
-    List<Tblest> findAllTblest();
-
-    boolean existsTblestByCveest(long cveest);
 
     Tblest findTblestByCveest(long cveest);
 
-    Page<Object[]> findRegularEstByRangePage(String startDate, String endDate, Pageable pageable);
-
-    Page<Object[]> findAllActiveEstWithUsr(String startDate, String endDate, String key, Pageable pageable);
-
-    Page<Object[]> findAllUnsetEstWithUsr(String startDate, String endDate, String key, Pageable pageable);
+    Page<Object[]> findEstByRangeTypeOrKey(String startDate, String endDate, String key, String type,
+                                           Pageable pageable, long actFlag);
 
 }

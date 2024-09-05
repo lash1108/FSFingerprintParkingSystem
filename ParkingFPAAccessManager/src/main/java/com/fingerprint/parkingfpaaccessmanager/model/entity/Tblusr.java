@@ -18,6 +18,15 @@ public class Tblusr {
     @Column(name = "CVEUSR")
     private Long cveusr;
 
+    // Relación OneToMany con Tblregistry
+    @OneToMany(mappedBy = "tblusr", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Tblregistry> tblregs;
+
+    @ElementCollection
+    @CollectionTable(name = "USER_IDCAR", joinColumns = @JoinColumn(name = "CVEUSR"))
+    @Column(name = "IDCAR")
+    private List<String> idcar;
+
     @Column(name = "NAMEUSR", length = 200)
     @NonNull
     private String nameusr;
@@ -34,19 +43,10 @@ public class Tblusr {
     @NonNull
     private String passwordusr;
 
-    @ElementCollection
-    @CollectionTable(name = "USER_IDCAR", joinColumns = @JoinColumn(name = "CVEUSR"))
-    @Column(name = "IDCAR")
-    private List<String> idcar;
-
     @Column(name = "TOKENUSR", length = 20, unique = true)
     private String tokenusr;
 
     @Column(name = "TYPEUSR", length = 1)
     @NonNull
     private String typeusr;
-
-    // Relación OneToMany con Tblest
-    @OneToMany(mappedBy = "tblusr", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Tblest> tblests;
 }

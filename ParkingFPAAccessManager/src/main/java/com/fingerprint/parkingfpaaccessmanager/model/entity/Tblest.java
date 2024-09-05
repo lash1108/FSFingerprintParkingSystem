@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "TBLEST")
@@ -22,12 +23,8 @@ public class Tblest {
     @Column(name = "CVEEST")
     private long cveest;
 
-    @ManyToOne
-    @JoinColumn(name = "CVEUSR", referencedColumnName = "CVEUSR")
-    private Tblusr tblusr;
-
-    @Column(name = "IDCAR", length = 100)
-    private String idcar;
+    @OneToMany(mappedBy = "tblest", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Tblregistry> tblregs;
 
     @Column(name = "ENTRYDATE")
     private LocalDateTime entrydate;

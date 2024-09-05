@@ -1,12 +1,11 @@
 package com.fingerprint.parkingfpaaccessmanager.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "TBLREGISTRY")
@@ -20,12 +19,15 @@ public class Tblregistry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cvereg;
 
-    @Column(name = "EDOREGISTRY", length = 1)
-    private String edoregistry;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cveusr", nullable = false)
+    @JsonBackReference
+    private Tblusr tblusr;
 
-    @Column(name = "ENTRYDATE")
-    private LocalDateTime entryDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cveest", nullable = false)
+    @JsonBackReference
+    private Tblest tblest;
 
-    @Column(name = "TOKENUSR", length = 20, unique = true)
-    private String tokenusr;
+
 }

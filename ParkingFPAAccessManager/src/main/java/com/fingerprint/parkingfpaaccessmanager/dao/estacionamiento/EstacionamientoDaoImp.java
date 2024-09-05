@@ -17,18 +17,18 @@ public class EstacionamientoDaoImp implements EstacionamientoDao {
 
 
     @Override
+    public List<Tblest> findActiveEstWithToken(String token) {
+        return tblestRepository.findActiveEstWithToken(token);
+    }
+
+    @Override
+    public boolean existActiveEstWithToken(String token) {
+        return tblestRepository.existsActiveEstWithToken(token) > 0;
+    }
+
+    @Override
     public Tblest saveOrUpdateTblest(Tblest tblest) {
         return tblestRepository.save(tblest);
-    }
-
-    @Override
-    public List<Tblest> findAllTblest() {
-        return tblestRepository.findAll();
-    }
-
-    @Override
-    public boolean existsTblestByCveest(long cveest) {
-        return tblestRepository.existsTblestByCveest(cveest);
     }
 
     @Override
@@ -37,17 +37,14 @@ public class EstacionamientoDaoImp implements EstacionamientoDao {
     }
 
     @Override
-    public Page<Object[]> findRegularEstByRangePage(String startDate, String endDate, Pageable pageable) {
-        return tblestRepository.findRegularEstByRangePage(startDate, endDate, pageable);
-    }
-
-    @Override
-    public Page<Object[]> findAllActiveEstWithUsr(String startDate, String endDate, String key, Pageable pageable) {
-        return tblestRepository.findAllActiveEstWithUsr(startDate, endDate, key, pageable);
-    }
-
-    @Override
-    public Page<Object[]> findAllUnsetEstWithUsr(String startDate, String endDate, String key, Pageable pageable) {
-        return tblestRepository.findAllUnsetEstWithUsr(startDate, endDate, key, pageable);
+    public Page<Object[]> findEstByRangeTypeOrKey(String startDate, String endDate, String key, String type,
+                                                  Pageable pageable, long actFlag) {
+        if (actFlag == 0) {
+            return tblestRepository.findActiveEstByRangeTypeOrKey(startDate, endDate, key, type, pageable);
+        } else if (actFlag == 1) {
+            return tblestRepository.findUnActiveEstByRangeTypeOrKey(startDate, endDate, key, type, pageable);
+        } else {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 }

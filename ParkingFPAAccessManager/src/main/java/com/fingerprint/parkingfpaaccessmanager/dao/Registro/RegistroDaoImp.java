@@ -3,7 +3,6 @@ package com.fingerprint.parkingfpaaccessmanager.dao.Registro;
 
 import com.fingerprint.parkingfpaaccessmanager.model.entity.Tblregistry;
 import com.fingerprint.parkingfpaaccessmanager.repository.TblregistryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,8 +10,12 @@ import java.util.List;
 @Repository
 public class RegistroDaoImp implements RegistroDao {
 
-    @Autowired
+    final
     TblregistryRepository tblregistryRepository;
+
+    public RegistroDaoImp(TblregistryRepository tblregistryRepository) {
+        this.tblregistryRepository = tblregistryRepository;
+    }
 
     @Override
     public Tblregistry createOrUpdateRegistry(Tblregistry tblregistry) {
@@ -20,18 +23,8 @@ public class RegistroDaoImp implements RegistroDao {
     }
 
     @Override
-    public List<Object[]> findLastEdoRegistryRecord() {
-        return tblregistryRepository.findLastEdoRegistryRecord();
-    }
-
-    @Override
-    public Tblregistry findByTokenusr(String token) {
-        return tblregistryRepository.findByTokenusr(token);
-    }
-
-    @Override
-    public boolean existsTblregistryByTokenusr(String token) {
-        return tblregistryRepository.existsTblregistryByTokenusr(token);
+    public Tblregistry findRegistryByCvereg(long cvereg) {
+        return tblregistryRepository.findTblregistryByCvereg(cvereg);
     }
 
     @Override
