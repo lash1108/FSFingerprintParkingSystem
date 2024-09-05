@@ -23,7 +23,7 @@ services:
       - '3306'
 
   admin-backend:
-    image: alextcw/admin-parking:v1.0
+    image: alextcw/admin-parking:v2.0
     restart: always
     networks:
       parkingnetwork:
