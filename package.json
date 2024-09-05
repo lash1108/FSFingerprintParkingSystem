@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@ionic-native/qr-scanner": "^5.36.0",
+    "cordova-plugin-qrscanner": "^3.0.1"
+  }
+}

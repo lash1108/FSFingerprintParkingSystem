@@ -7,7 +7,7 @@ networks:
 
 services:
   estacionamiento-db:
-    image: mysql
+    image: mysql:latest
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: '09112'
@@ -21,6 +21,8 @@ services:
       - '3306:3306'
     expose:
       - '3306'
+    volumes:
+      - db-data:/var/lib/mysql  # Agrega el volumen para la base de datos
 
   admin-backend:
     image: alextcw/admin-parking:v2.0
@@ -34,6 +36,9 @@ services:
       - '8080'
     depends_on:
       - estacionamiento-db
+    volumes:
+      - images-data:/home/alextcw/Files/images  # Agrega el volumen para las imágenes
 
 volumes:
-  db-data:  # Define el volumen
+  db-data:  # Define el volumen para la base de datos
+  images-data:  # Define el volumen para las imágenes
