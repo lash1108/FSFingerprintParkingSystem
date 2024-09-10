@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class RegistryService {
   //baseURL = `${environment.backendURL}/registry`;
-  baseURL = `http://parking-uaem.ddns.net:8080/registry`;
+  baseURL = `https://parking-uaem.ddns.net:8080/registry`;
 
   headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
